@@ -1,0 +1,8 @@
+pip install tensorflow==2.11.0
+pip install pandas==2.0.0
+pip install matplotlib==3.7.1
+pip install fastapi==0.95.1
+pip install flask==2.2.3
+pip install jupyterlab==3.6.3
+pip install remotezip tqdm opencv-python
+pip install -q git+https://github.com/tensorflow/docs
