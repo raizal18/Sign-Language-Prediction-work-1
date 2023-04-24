@@ -30,3 +30,10 @@ from framer import frames_from_video_file
 
 sample_video = frames_from_video_file(video_path, n_frames = 24)
 sample_video.shape
+
+i = 1
+for im in sample_video:
+  plt.subplot(4,4,i)
+  i += 1
+  plt.imshow(im)
+plt.show(block=False)
