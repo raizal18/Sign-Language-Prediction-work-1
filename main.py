@@ -30,13 +30,3 @@ from framer import frames_from_video_file
 
 sample_video = frames_from_video_file(video_path, n_frames = 24)
 sample_video.shape
-
-def to_gif(images):
-  converted_images = np.clip(images * 255, 0, 255).astype(np.uint8)
-  imageio.mimsave('./animation.gif', converted_images, fps=10)
-  return embed.embed_file('./animation.gif')
-
-
-to_gif(sample_video)
-
-
