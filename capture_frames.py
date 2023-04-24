@@ -9,7 +9,7 @@ from tensorflow import keras
 from keras.preprocessing.image import ImageDataGenerator
 from main import _MAIN_PATH, DATA_PATH, content_directory, video_path, details, info_csv 
 from matplotlib import pyplot as plt
-
+from keras import layers
 
 total_files = 0
 file_url = []
@@ -56,11 +56,11 @@ image_gen = ImageDataGenerator(rescale=1. / 255)
 imds = image_gen.flow_from_dataframe(dataframe = frame_data, 
 x_col = "Frames path",
 y_col = "Word",
-target_size=(224,224),color_mode='rgb')
+target_size = (224, 224), color_mode='rgb')
 
 
-[im , lab] = imds.next()
-imds.classes
+[im, lab] = imds.next()
+
 
 for i in range(1,26):
     plt.subplot(5, 5, i)
@@ -68,3 +68,5 @@ for i in range(1,26):
     plt.imshow(im[i])
     plt.title([j for j in imds.class_indices if imds.class_indices[j]==np.argmax(lab[i],axis=0)])
 plt.show(block=False)
+
+
