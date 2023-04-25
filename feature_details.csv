@@ -1,0 +1,688 @@
+,label,stored feature
+0,are you free today,features\0.npy
+1,are you free today,features\1.npy
+2,are you free today,features\2.npy
+3,are you free today,features\3.npy
+4,are you free today,features\4.npy
+5,are you free today,features\5.npy
+6,are you free today,features\6.npy
+7,are you hiding something,features\7.npy
+8,are you hiding something,features\8.npy
+9,are you hiding something,features\9.npy
+10,are you hiding something,features\10.npy
+11,are you hiding something,features\11.npy
+12,are you hiding something,features\12.npy
+13,are you hiding something,features\13.npy
+14,bring water for me,features\14.npy
+15,bring water for me,features\15.npy
+16,bring water for me,features\16.npy
+17,bring water for me,features\17.npy
+18,bring water for me,features\18.npy
+19,bring water for me,features\19.npy
+20,bring water for me,features\20.npy
+21,can i help you,features\21.npy
+22,can i help you,features\22.npy
+23,can i help you,features\23.npy
+24,can i help you,features\24.npy
+25,can i help you,features\25.npy
+26,can i help you,features\26.npy
+27,can i help you,features\27.npy
+28,can i help you,features\28.npy
+29,can you repeat that please,features\29.npy
+30,can you repeat that please,features\30.npy
+31,can you repeat that please,features\31.npy
+32,can you repeat that please,features\32.npy
+33,can you repeat that please,features\33.npy
+34,can you repeat that please,features\34.npy
+35,can you repeat that please,features\35.npy
+36,comb your hair,features\36.npy
+37,comb your hair,features\37.npy
+38,comb your hair,features\38.npy
+39,comb your hair,features\39.npy
+40,comb your hair,features\40.npy
+41,comb your hair,features\41.npy
+42,comb your hair,features\42.npy
+43,congratulations,features\43.npy
+44,congratulations,features\44.npy
+45,congratulations,features\45.npy
+46,congratulations,features\46.npy
+47,congratulations,features\47.npy
+48,congratulations,features\48.npy
+49,congratulations,features\49.npy
+50,could you please talk slower,features\50.npy
+51,could you please talk slower,features\51.npy
+52,could you please talk slower,features\52.npy
+53,could you please talk slower,features\53.npy
+54,could you please talk slower,features\54.npy
+55,could you please talk slower,features\55.npy
+56,could you please talk slower,features\56.npy
+57,do me a favour,features\57.npy
+58,do me a favour,features\58.npy
+59,do me a favour,features\59.npy
+60,do me a favour,features\60.npy
+61,do me a favour,features\61.npy
+62,do me a favour,features\62.npy
+63,do me a favour,features\63.npy
+64,do not abuse him,features\64.npy
+65,do not abuse him,features\65.npy
+66,do not abuse him,features\66.npy
+67,do not abuse him,features\67.npy
+68,do not abuse him,features\68.npy
+69,do not abuse him,features\69.npy
+70,do not be stubborn,features\70.npy
+71,do not be stubborn,features\71.npy
+72,do not be stubborn,features\72.npy
+73,do not be stubborn,features\73.npy
+74,do not be stubborn,features\74.npy
+75,do not be stubborn,features\75.npy
+76,do not hurt me,features\76.npy
+77,do not hurt me,features\77.npy
+78,do not hurt me,features\78.npy
+79,do not hurt me,features\79.npy
+80,do not hurt me,features\80.npy
+81,do not hurt me,features\81.npy
+82,do not hurt me,features\82.npy
+83,do not make me angry,features\83.npy
+84,do not make me angry,features\84.npy
+85,do not make me angry,features\85.npy
+86,do not make me angry,features\86.npy
+87,do not make me angry,features\87.npy
+88,do not make me angry,features\88.npy
+89,do not make me angry,features\89.npy
+90,do not take it to the heart,features\90.npy
+91,do not take it to the heart,features\91.npy
+92,do not take it to the heart,features\92.npy
+93,do not take it to the heart,features\93.npy
+94,do not take it to the heart,features\94.npy
+95,do not take it to the heart,features\95.npy
+96,do not take it to the heart,features\96.npy
+97,do not worry,features\97.npy
+98,do not worry,features\98.npy
+99,do not worry,features\99.npy
+100,do not worry,features\100.npy
+101,do not worry,features\101.npy
+102,do not worry,features\102.npy
+103,do not worry,features\103.npy
+104,do you need something,features\104.npy
+105,do you need something,features\105.npy
+106,do you need something,features\106.npy
+107,do you need something,features\107.npy
+108,do you need something,features\108.npy
+109,do you need something,features\109.npy
+110,do you need something,features\110.npy
+111,go and sleep,features\111.npy
+112,go and sleep,features\112.npy
+113,go and sleep,features\113.npy
+114,go and sleep,features\114.npy
+115,go and sleep,features\115.npy
+116,go and sleep,features\116.npy
+117,go and sleep,features\117.npy
+118,go and sleep,features\118.npy
+119,had your food,features\119.npy
+120,had your food,features\120.npy
+121,had your food,features\121.npy
+122,had your food,features\122.npy
+123,had your food,features\123.npy
+124,had your food,features\124.npy
+125,had your food,features\125.npy
+126,he came by train,features\126.npy
+127,he came by train,features\127.npy
+128,he came by train,features\128.npy
+129,he came by train,features\129.npy
+130,he came by train,features\130.npy
+131,he came by train,features\131.npy
+132,he came by train,features\132.npy
+133,He is going into the room,features\133.npy
+134,He is going into the room,features\134.npy
+135,He is going into the room,features\135.npy
+136,He is going into the room,features\136.npy
+137,He is going into the room,features\137.npy
+138,He is going into the room,features\138.npy
+139,He is going into the room,features\139.npy
+140,he is on the way,features\140.npy
+141,he is on the way,features\141.npy
+142,he is on the way,features\142.npy
+143,he is on the way,features\143.npy
+144,he is on the way,features\144.npy
+145,he is on the way,features\145.npy
+146,he she is my friend,features\146.npy
+147,he she is my friend,features\147.npy
+148,he she is my friend,features\148.npy
+149,he she is my friend,features\149.npy
+150,he she is my friend,features\150.npy
+151,he she is my friend,features\151.npy
+152,he she is my friend,features\152.npy
+153,he would be coming today,features\153.npy
+154,he would be coming today,features\154.npy
+155,he would be coming today,features\155.npy
+156,he would be coming today,features\156.npy
+157,he would be coming today,features\157.npy
+158,he would be coming today,features\158.npy
+159,he would be coming today,features\159.npy
+160,help me,features\160.npy
+161,help me,features\161.npy
+162,help me,features\162.npy
+163,help me,features\163.npy
+164,help me,features\164.npy
+165,help me,features\165.npy
+166,help me,features\166.npy
+167,hi how are you,features\167.npy
+168,hi how are you,features\168.npy
+169,hi how are you,features\169.npy
+170,hi how are you,features\170.npy
+171,hi how are you,features\171.npy
+172,hi how are you,features\172.npy
+173,hi how are you,features\173.npy
+174,how are things,features\174.npy
+175,how are things,features\175.npy
+176,how are things,features\176.npy
+177,how are things,features\177.npy
+178,how are things,features\178.npy
+179,how are things,features\179.npy
+180,how can i help you,features\180.npy
+181,how can i help you,features\181.npy
+182,how can i help you,features\182.npy
+183,how can i help you,features\183.npy
+184,how can i help you,features\184.npy
+185,how can i help you,features\185.npy
+186,how can i help you,features\186.npy
+187,how can i trust you,features\187.npy
+188,how can i trust you,features\188.npy
+189,how can i trust you,features\189.npy
+190,how can i trust you,features\190.npy
+191,how can i trust you,features\191.npy
+192,how can i trust you,features\192.npy
+193,how can i trust you,features\193.npy
+194,how dare you,features\194.npy
+195,how dare you,features\195.npy
+196,how dare you,features\196.npy
+197,how dare you,features\197.npy
+198,how dare you,features\198.npy
+199,how dare you,features\199.npy
+200,how dare you,features\200.npy
+201,how old are you,features\201.npy
+202,how old are you,features\202.npy
+203,how old are you,features\203.npy
+204,how old are you,features\204.npy
+205,how old are you,features\205.npy
+206,how old are you,features\206.npy
+207,how old are you,features\207.npy
+208,i am (age),features\208.npy
+209,i am (age),features\209.npy
+210,i am (age),features\210.npy
+211,i am (age),features\211.npy
+212,i am (age),features\212.npy
+213,i am (age),features\213.npy
+214,i am afraid of that,features\214.npy
+215,i am afraid of that,features\215.npy
+216,i am afraid of that,features\216.npy
+217,i am afraid of that,features\217.npy
+218,i am afraid of that,features\218.npy
+219,i am afraid of that,features\219.npy
+220,i am afraid of that,features\220.npy
+221,i am crying,features\221.npy
+222,i am crying,features\222.npy
+223,i am crying,features\223.npy
+224,i am crying,features\224.npy
+225,i am crying,features\225.npy
+226,i am crying,features\226.npy
+227,i am crying,features\227.npy
+228,i am feeling bored,features\228.npy
+229,i am feeling bored,features\229.npy
+230,i am feeling bored,features\230.npy
+231,i am feeling bored,features\231.npy
+232,i am feeling bored,features\232.npy
+233,i am feeling bored,features\233.npy
+234,i am feeling bored,features\234.npy
+235,i am feeling cold,features\235.npy
+236,i am feeling cold,features\236.npy
+237,i am feeling cold,features\237.npy
+238,i am feeling cold,features\238.npy
+239,i am feeling cold,features\239.npy
+240,i am feeling cold,features\240.npy
+241,i am feeling cold,features\241.npy
+242,i am fine. thank you sir,features\242.npy
+243,i am fine. thank you sir,features\243.npy
+244,i am fine. thank you sir,features\244.npy
+245,i am fine. thank you sir,features\245.npy
+246,i am fine. thank you sir,features\246.npy
+247,i am fine. thank you sir,features\247.npy
+248,i am fine. thank you sir,features\248.npy
+249,i am hungry,features\249.npy
+250,i am hungry,features\250.npy
+251,i am hungry,features\251.npy
+252,i am hungry,features\252.npy
+253,i am hungry,features\253.npy
+254,i am hungry,features\254.npy
+255,i am hungry,features\255.npy
+256,i am in dilemma what to do,features\256.npy
+257,i am in dilemma what to do,features\257.npy
+258,i am in dilemma what to do,features\258.npy
+259,i am in dilemma what to do,features\259.npy
+260,i am in dilemma what to do,features\260.npy
+261,i am in dilemma what to do,features\261.npy
+262,i am in dilemma what to do,features\262.npy
+263,i am not really sure,features\263.npy
+264,i am not really sure,features\264.npy
+265,i am not really sure,features\265.npy
+266,i am not really sure,features\266.npy
+267,i am not really sure,features\267.npy
+268,i am not really sure,features\268.npy
+269,i am not really sure,features\269.npy
+270,i am really grateful,features\270.npy
+271,i am really grateful,features\271.npy
+272,i am really grateful,features\272.npy
+273,i am really grateful,features\273.npy
+274,i am really grateful,features\274.npy
+275,i am really grateful,features\275.npy
+276,i am really grateful,features\276.npy
+277,i am sitting in the class,features\277.npy
+278,i am sitting in the class,features\278.npy
+279,i am sitting in the class,features\279.npy
+280,i am sitting in the class,features\280.npy
+281,i am sitting in the class,features\281.npy
+282,i am sitting in the class,features\282.npy
+283,i am sitting in the class,features\283.npy
+284,i am so sorry to hear that,features\284.npy
+285,i am so sorry to hear that,features\285.npy
+286,i am so sorry to hear that,features\286.npy
+287,i am so sorry to hear that,features\287.npy
+288,i am so sorry to hear that,features\288.npy
+289,i am so sorry to hear that,features\289.npy
+290,i am so sorry to hear that,features\290.npy
+291,i am suffering from fever,features\291.npy
+292,i am suffering from fever,features\292.npy
+293,i am suffering from fever,features\293.npy
+294,i am suffering from fever,features\294.npy
+295,i am suffering from fever,features\295.npy
+296,i am suffering from fever,features\296.npy
+297,i am suffering from fever,features\297.npy
+298,i am tired,features\298.npy
+299,i am tired,features\299.npy
+300,i am tired,features\300.npy
+301,i am tired,features\301.npy
+302,i am tired,features\302.npy
+303,i am tired,features\303.npy
+304,i am tired,features\304.npy
+305,i am very happy,features\305.npy
+306,i am very happy,features\306.npy
+307,i am very happy,features\307.npy
+308,i am very happy,features\308.npy
+309,i am very happy,features\309.npy
+310,i am very happy,features\310.npy
+311,i can not help you there,features\311.npy
+312,i can not help you there,features\312.npy
+313,i can not help you there,features\313.npy
+314,i can not help you there,features\314.npy
+315,i can not help you there,features\315.npy
+316,i can not help you there,features\316.npy
+317,i can not help you there,features\317.npy
+318,i do not agree,features\318.npy
+319,i do not agree,features\319.npy
+320,i do not agree,features\320.npy
+321,i do not agree,features\321.npy
+322,i do not agree,features\322.npy
+323,i do not agree,features\323.npy
+324,i do not agree,features\324.npy
+325,i do not like it,features\325.npy
+326,i do not like it,features\326.npy
+327,i do not like it,features\327.npy
+328,i do not like it,features\328.npy
+329,i do not like it,features\329.npy
+330,i do not like it,features\330.npy
+331,i do not like it,features\331.npy
+332,i do not mean it,features\332.npy
+333,i do not mean it,features\333.npy
+334,i do not mean it,features\334.npy
+335,i do not mean it,features\335.npy
+336,i do not mean it,features\336.npy
+337,i do not mean it,features\337.npy
+338,i do not mean it,features\338.npy
+339,i dont agree,features\339.npy
+340,i enjoyed a lot,features\340.npy
+341,i enjoyed a lot,features\341.npy
+342,i enjoyed a lot,features\342.npy
+343,i enjoyed a lot,features\343.npy
+344,i enjoyed a lot,features\344.npy
+345,i enjoyed a lot,features\345.npy
+346,i enjoyed a lot,features\346.npy
+347,i enjoyed a lot,features\347.npy
+348,i got hurt,features\348.npy
+349,i got hurt,features\349.npy
+350,i got hurt,features\350.npy
+351,i got hurt,features\351.npy
+352,i got hurt,features\352.npy
+353,i got hurt,features\353.npy
+354,i got hurt,features\354.npy
+355,i like you i love you,features\355.npy
+356,i like you i love you,features\356.npy
+357,i like you i love you,features\357.npy
+358,i like you i love you,features\358.npy
+359,i like you i love you,features\359.npy
+360,i like you i love you,features\360.npy
+361,i like you i love you,features\361.npy
+362,i like you i love you,features\362.npy
+363,i need water,features\363.npy
+364,i need water,features\364.npy
+365,i need water,features\365.npy
+366,i need water,features\366.npy
+367,i need water,features\367.npy
+368,i need water,features\368.npy
+369,i need water,features\369.npy
+370,i promise,features\370.npy
+371,i promise,features\371.npy
+372,i promise,features\372.npy
+373,i promise,features\373.npy
+374,i promise,features\374.npy
+375,i promise,features\375.npy
+376,i promise,features\376.npy
+377,i really appreciate it,features\377.npy
+378,i really appreciate it,features\378.npy
+379,i really appreciate it,features\379.npy
+380,i really appreciate it,features\380.npy
+381,i really appreciate it,features\381.npy
+382,i really appreciate it,features\382.npy
+383,i really appreciate it,features\383.npy
+384,i somehow got to know about it,features\384.npy
+385,i somehow got to know about it,features\385.npy
+386,i somehow got to know about it,features\386.npy
+387,i somehow got to know about it,features\387.npy
+388,i somehow got to know about it,features\388.npy
+389,i somehow got to know about it,features\389.npy
+390,i somehow got to know about it,features\390.npy
+391,i was stopped by some one,features\391.npy
+392,i was stopped by some one,features\392.npy
+393,i was stopped by some one,features\393.npy
+394,i was stopped by some one,features\394.npy
+395,i was stopped by some one,features\395.npy
+396,i was stopped by some one,features\396.npy
+397,i was stopped by some one,features\397.npy
+398,it does not make any difference to me,features\398.npy
+399,it does not make any difference to me,features\399.npy
+400,it does not make any difference to me,features\400.npy
+401,it does not make any difference to me,features\401.npy
+402,it does not make any difference to me,features\402.npy
+403,it does not make any difference to me,features\403.npy
+404,it does not make any difference to me,features\404.npy
+405,it was nice chatting with you,features\405.npy
+406,it was nice chatting with you,features\406.npy
+407,it was nice chatting with you,features\407.npy
+408,it was nice chatting with you,features\408.npy
+409,it was nice chatting with you,features\409.npy
+410,it was nice chatting with you,features\410.npy
+411,it was nice chatting with you,features\411.npy
+412,let him take time,features\412.npy
+413,let him take time,features\413.npy
+414,let him take time,features\414.npy
+415,let him take time,features\415.npy
+416,let him take time,features\416.npy
+417,let him take time,features\417.npy
+418,let him take time,features\418.npy
+419,my name is xxxxxxxx,features\419.npy
+420,my name is xxxxxxxx,features\420.npy
+421,my name is xxxxxxxx,features\421.npy
+422,my name is xxxxxxxx,features\422.npy
+423,my name is xxxxxxxx,features\423.npy
+424,my name is xxxxxxxx,features\424.npy
+425,my name is xxxxxxxx,features\425.npy
+426,nice to meet you,features\426.npy
+427,nice to meet you,features\427.npy
+428,nice to meet you,features\428.npy
+429,nice to meet you,features\429.npy
+430,nice to meet you,features\430.npy
+431,nice to meet you,features\431.npy
+432,nice to meet you,features\432.npy
+433,No need to worry dont worry,features\433.npy
+434,now onwards he will never hurt you,features\434.npy
+435,now onwards he will never hurt you,features\435.npy
+436,now onwards he will never hurt you,features\436.npy
+437,now onwards he will never hurt you,features\437.npy
+438,now onwards he will never hurt you,features\438.npy
+439,now onwards he will never hurt you,features\439.npy
+440,pour some more water into the glass,features\440.npy
+441,pour some more water into the glass,features\441.npy
+442,pour some more water into the glass,features\442.npy
+443,pour some more water into the glass,features\443.npy
+444,pour some more water into the glass,features\444.npy
+445,pour some more water into the glass,features\445.npy
+446,pour some more water into the glass,features\446.npy
+447,prepare the bed,features\447.npy
+448,prepare the bed,features\448.npy
+449,prepare the bed,features\449.npy
+450,prepare the bed,features\450.npy
+451,prepare the bed,features\451.npy
+452,prepare the bed,features\452.npy
+453,prepare the bed,features\453.npy
+454,serve the food,features\454.npy
+455,serve the food,features\455.npy
+456,serve the food,features\456.npy
+457,serve the food,features\457.npy
+458,serve the food,features\458.npy
+459,serve the food,features\459.npy
+460,serve the food,features\460.npy
+461,serve the food,features\461.npy
+462,serve the food,features\462.npy
+463,shall we go outside,features\463.npy
+464,shall we go outside,features\464.npy
+465,shall we go outside,features\465.npy
+466,shall we go outside,features\466.npy
+467,shall we go outside,features\467.npy
+468,shall we go outside,features\468.npy
+469,shall we go outside,features\469.npy
+470,speak softly,features\470.npy
+471,speak softly,features\471.npy
+472,speak softly,features\472.npy
+473,speak softly,features\473.npy
+474,speak softly,features\474.npy
+475,speak softly,features\475.npy
+476,speak softly,features\476.npy
+477,speak softly,features\477.npy
+478,take care of yourself,features\478.npy
+479,take care of yourself,features\479.npy
+480,take care of yourself,features\480.npy
+481,take care of yourself,features\481.npy
+482,take care of yourself,features\482.npy
+483,take care of yourself,features\483.npy
+484,take care of yourself,features\484.npy
+485,tell me truth,features\485.npy
+486,tell me truth,features\486.npy
+487,tell me truth,features\487.npy
+488,tell me truth,features\488.npy
+489,tell me truth,features\489.npy
+490,tell me truth,features\490.npy
+491,thank you so much,features\491.npy
+492,thank you so much,features\492.npy
+493,thank you so much,features\493.npy
+494,thank you so much,features\494.npy
+495,thank you so much,features\495.npy
+496,thank you so much,features\496.npy
+497,thank you so much,features\497.npy
+498,that is so kind of you,features\498.npy
+499,that is so kind of you,features\499.npy
+500,that is so kind of you,features\500.npy
+501,that is so kind of you,features\501.npy
+502,that is so kind of you,features\502.npy
+503,that is so kind of you,features\503.npy
+504,that is so kind of you,features\504.npy
+505,This place is beautiful,features\505.npy
+506,This place is beautiful,features\506.npy
+507,This place is beautiful,features\507.npy
+508,This place is beautiful,features\508.npy
+509,This place is beautiful,features\509.npy
+510,This place is beautiful,features\510.npy
+511,This place is beautiful,features\511.npy
+512,try to understand,features\512.npy
+513,try to understand,features\513.npy
+514,try to understand,features\514.npy
+515,try to understand,features\515.npy
+516,try to understand,features\516.npy
+517,try to understand,features\517.npy
+518,try to understand,features\518.npy
+519,turn on light turn off light,features\519.npy
+520,turn on light turn off light,features\520.npy
+521,turn on light turn off light,features\521.npy
+522,turn on light turn off light,features\522.npy
+523,turn on light turn off light,features\523.npy
+524,turn on light turn off light,features\524.npy
+525,turn on light turn off light,features\525.npy
+526,we are all with you,features\526.npy
+527,we are all with you,features\527.npy
+528,we are all with you,features\528.npy
+529,we are all with you,features\529.npy
+530,we are all with you,features\530.npy
+531,we are all with you,features\531.npy
+532,we are all with you,features\532.npy
+533,wear the shirt,features\533.npy
+534,wear the shirt,features\534.npy
+535,wear the shirt,features\535.npy
+536,wear the shirt,features\536.npy
+537,wear the shirt,features\537.npy
+538,wear the shirt,features\538.npy
+539,wear the shirt,features\539.npy
+540,what are you doing,features\540.npy
+541,what are you doing,features\541.npy
+542,what are you doing,features\542.npy
+543,what are you doing,features\543.npy
+544,what are you doing,features\544.npy
+545,what are you doing,features\545.npy
+546,what are you doing,features\546.npy
+547,what did you tell him,features\547.npy
+548,what did you tell him,features\548.npy
+549,what did you tell him,features\549.npy
+550,what did you tell him,features\550.npy
+551,what did you tell him,features\551.npy
+552,what did you tell him,features\552.npy
+553,what did you tell him,features\553.npy
+554,what do you do,features\554.npy
+555,what do you do,features\555.npy
+556,what do you do,features\556.npy
+557,what do you do,features\557.npy
+558,what do you do,features\558.npy
+559,what do you do,features\559.npy
+560,what do you think,features\560.npy
+561,what do you think,features\561.npy
+562,what do you think,features\562.npy
+563,what do you think,features\563.npy
+564,what do you think,features\564.npy
+565,what do you think,features\565.npy
+566,what do you think,features\566.npy
+567,what do you want to become,features\567.npy
+568,what do you want to become,features\568.npy
+569,what do you want to become,features\569.npy
+570,what do you want to become,features\570.npy
+571,what do you want to become,features\571.npy
+572,what do you want to become,features\572.npy
+573,what do you want to become,features\573.npy
+574,what happened,features\574.npy
+575,what happened,features\575.npy
+576,what happened,features\576.npy
+577,what happened,features\577.npy
+578,what happened,features\578.npy
+579,what happened,features\579.npy
+580,what have you planned for your career,features\580.npy
+581,what have you planned for your career,features\581.npy
+582,what have you planned for your career,features\582.npy
+583,what is your phone number,features\583.npy
+584,what is your phone number,features\584.npy
+585,what is your phone number,features\585.npy
+586,what is your phone number,features\586.npy
+587,what is your phone number,features\587.npy
+588,what is your phone number,features\588.npy
+589,what is your phone number,features\589.npy
+590,what you want,features\590.npy
+591,what you want,features\591.npy
+592,what you want,features\592.npy
+593,what you want,features\593.npy
+594,what you want,features\594.npy
+595,what you want,features\595.npy
+596,what you want,features\596.npy
+597,when will the train leave,features\597.npy
+598,when will the train leave,features\598.npy
+599,when will the train leave,features\599.npy
+600,when will the train leave,features\600.npy
+601,when will the train leave,features\601.npy
+602,when will the train leave,features\602.npy
+603,when will the train leave,features\603.npy
+604,where are you from,features\604.npy
+605,where are you from,features\605.npy
+606,where are you from,features\606.npy
+607,where are you from,features\607.npy
+608,where are you from,features\608.npy
+609,where are you from,features\609.npy
+610,which collegeschool are you from,features\610.npy
+611,which collegeschool are you from,features\611.npy
+612,which collegeschool are you from,features\612.npy
+613,which collegeschool are you from,features\613.npy
+614,which collegeschool are you from,features\614.npy
+615,which collegeschool are you from,features\615.npy
+616,which collegeschool are you from,features\616.npy
+617,who are you,features\617.npy
+618,who are you,features\618.npy
+619,who are you,features\619.npy
+620,who are you,features\620.npy
+621,who are you,features\621.npy
+622,who are you,features\622.npy
+623,who are you,features\623.npy
+624,why are you angry,features\624.npy
+625,why are you angry,features\625.npy
+626,why are you angry,features\626.npy
+627,why are you angry,features\627.npy
+628,why are you angry,features\628.npy
+629,why are you angry,features\629.npy
+630,why are you angry,features\630.npy
+631,why are you crying,features\631.npy
+632,why are you crying,features\632.npy
+633,why are you crying,features\633.npy
+634,why are you crying,features\634.npy
+635,why are you crying,features\635.npy
+636,why are you crying,features\636.npy
+637,why are you crying,features\637.npy
+638,why are you disappointed,features\638.npy
+639,why are you disappointed,features\639.npy
+640,why are you disappointed,features\640.npy
+641,why are you disappointed,features\641.npy
+642,why are you disappointed,features\642.npy
+643,why are you disappointed,features\643.npy
+644,why are you disappointed,features\644.npy
+645,you are bad,features\645.npy
+646,you are bad,features\646.npy
+647,you are bad,features\647.npy
+648,you are bad,features\648.npy
+649,you are bad,features\649.npy
+650,you are bad,features\650.npy
+651,you are bad,features\651.npy
+652,you are bad,features\652.npy
+653,you are good,features\653.npy
+654,you are good,features\654.npy
+655,you are good,features\655.npy
+656,you are good,features\656.npy
+657,you are good,features\657.npy
+658,you are good,features\658.npy
+659,you are good,features\659.npy
+660,you are welcome,features\660.npy
+661,you are welcome,features\661.npy
+662,you are welcome,features\662.npy
+663,you are welcome,features\663.npy
+664,you are welcome,features\664.npy
+665,you are welcome,features\665.npy
+666,you are welcome,features\666.npy
+667,you can do it,features\667.npy
+668,you can do it,features\668.npy
+669,you can do it,features\669.npy
+670,you can do it,features\670.npy
+671,you can do it,features\671.npy
+672,you can do it,features\672.npy
+673,you can do it,features\673.npy
+674,"you do anything, i do not care",features\674.npy
+675,"you do anything, i do not care",features\675.npy
+676,"you do anything, i do not care",features\676.npy
+677,"you do anything, i do not care",features\677.npy
+678,"you do anything, i do not care",features\678.npy
+679,"you do anything, i do not care",features\679.npy
+680,"you need a medicine, take this one",features\680.npy
+681,"you need a medicine, take this one",features\681.npy
+682,"you need a medicine, take this one",features\682.npy
+683,"you need a medicine, take this one",features\683.npy
+684,"you need a medicine, take this one",features\684.npy
+685,"you need a medicine, take this one",features\685.npy
+686,"you need a medicine, take this one",features\686.npy
