@@ -164,60 +164,61 @@ sample_label = video_labelled['label'].values[17]
 
 get_feature(sample,sample_label)
 
+EXTRACT_FEATURE =False
+if EXTRACT_FEATURE == True
+    def extract_keypoints(results):
+        pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
+        face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(468*3)
+        lh = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
+        rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
+        return np.concatenate([pose, face, lh, rh])
+
+    def get_results(sample):
+        mp_holistic = mp.solutions.holistic # Holistic model
+        mp_drawing = mp.solutions.drawing_utils # Drawing utilities
 
 
-def extract_keypoints(results):
-    pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
-    face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(468*3)
-    lh = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
-    rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
-    return np.concatenate([pose, face, lh, rh])
+        def mediapipe_detection(image, model):
+        
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
+            image.flags.writeable = False                  # Image is no longer writeable
+            results = model.process(image)                 # Make prediction
+            image.flags.writeable = True                   # Image is now writeable 
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # COLOR COVERSION RGB 2 BGR
+            return image, results
+        cap = cv2.VideoCapture(sample)
+        feat_list = []
+        # Set mediapipe model 
+        with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+            while cap.isOpened():
 
-def get_results(sample):
-    mp_holistic = mp.solutions.holistic # Holistic model
-    mp_drawing = mp.solutions.drawing_utils # Drawing utilities
-
-
-    def mediapipe_detection(image, model):
+                # Read feed
+                ret, frame = cap.read()
     
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
-        image.flags.writeable = False                  # Image is no longer writeable
-        results = model.process(image)                 # Make prediction
-        image.flags.writeable = True                   # Image is now writeable 
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # COLOR COVERSION RGB 2 BGR
-        return image, results
-    cap = cv2.VideoCapture(sample)
-    feat_list = []
-    # Set mediapipe model 
-    with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-        while cap.isOpened():
-
-            # Read feed
-            ret, frame = cap.read()
- 
-            try :
-                frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
-                image, results = mediapipe_detection(frame, holistic)
-                feat_list.append(results)
-            except:
-                cap.release()
-                return np.array([extract_keypoints(results) for result in feat_list])
-                
+                try :
+                    frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
+                    image, results = mediapipe_detection(frame, holistic)
+                    feat_list.append(results)
+                except:
+                    cap.release()
+                    return np.array([extract_keypoints(results) for result in feat_list])
+                    
 
 
 
-lab_det = []
-feat_fname = []
-idx = 0
-for sample,label in zip(video_labelled['video location'],video_labelled['label']):
-    
-    lab_det.append(label)
-    feat_fname.append(os.path.join('features',f"{idx}.npy"))
-    print(f"file {sample} in progress")
-    np.save(os.path.join('features',f"{idx}.npy"),get_results(sample))
-    idx += 1
-    # np.save(os.path.join('features',f"{idx}.npy"),feat)
-pd.DataFrame((lab_det,feat_fname),columns=['label','stored feature']).to_csv('feature_details.csv')
+    lab_det = []
+    feat_fname = []
+    idx = 0
+    for sample,label in zip(video_labelled['video location'],video_labelled['label']):
+        
+        lab_det.append(label)
+        feat_fname.append(os.path.join('features',f"{idx}.npy"))
+        print(f"file {sample} in progress")
+        np.save(os.path.join('features',f"{idx}.npy"),get_results(sample))
+        idx += 1
+        # np.save(os.path.join('features',f"{idx}.npy"),feat)
+    pd.DataFrame(np.array([lab_det,feat_fname]).transpose(),columns=['label','stored feature']).to_csv('feature_details.csv')
 
+FEATURE_PATH =  'features'  
 
 
