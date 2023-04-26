@@ -45,11 +45,11 @@ video_labelled = pd.DataFrame(list(zip(file_url,class_description)),columns=["vi
 
 # ## import frames for words labelled
 
-# word_frame = pd.read_excel(os.path.join(DATA_PATH,'corpus_csv_files','ISL_CSLRT_Corpus_word_details.xlsx'))
+word_frame = pd.read_excel(os.path.join(DATA_PATH,'corpus_csv_files','ISL_CSLRT_Corpus_word_details.xlsx'))
 
-# frame_data = word_frame.copy()
+frame_data = word_frame.copy()
 
-# frame_data["Frames path"] =  _MAIN_PATH +'/'+ frame_data["Frames path"]
+frame_data["Frames path"] =  _MAIN_PATH +'/'+ frame_data["Frames path"]
 
 
 
@@ -164,47 +164,87 @@ sample_label = video_labelled['label'].values[17]
 
 get_feature(sample,sample_label)
 
-EXTRACT_FEATURE =False
-if EXTRACT_FEATURE == True:
-    def extract_keypoints(results):
-        pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
-        face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(468*3)
-        lh = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
-        rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
-        return np.concatenate([pose, face, lh, rh])
+EXTRACT_FEATURE_VIDEO =False
 
-    def get_results(sample):
-        mp_holistic = mp.solutions.holistic # Holistic model
-        mp_drawing = mp.solutions.drawing_utils # Drawing utilities
+def extract_keypoints(results):
+    pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
+    face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(468*3)
+    lh = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
+    rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
+    return np.concatenate([pose, face, lh, rh])
+
+def get_results(sample):
+    mp_holistic = mp.solutions.holistic # Holistic model
+    mp_drawing = mp.solutions.drawing_utils # Drawing utilities
 
 
-        def mediapipe_detection(image, model):
-        
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
-            image.flags.writeable = False                  # Image is no longer writeable
-            results = model.process(image)                 # Make prediction
-            image.flags.writeable = True                   # Image is now writeable 
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # COLOR COVERSION RGB 2 BGR
-            return image, results
-        cap = cv2.VideoCapture(sample)
-        feat_list = []
-        # Set mediapipe model 
-        with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
-            while cap.isOpened():
-
-                # Read feed
-                ret, frame = cap.read()
+    def mediapipe_detection(image, model):
     
-                try :
-                    frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
-                    image, results = mediapipe_detection(frame, holistic)
-                    feat_list.append(results)
-                except:
-                    cap.release()
-                    return np.array([extract_keypoints(results) for result in feat_list])
-                    
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
+        image.flags.writeable = False                  # Image is no longer writeable
+        results = model.process(image)                 # Make prediction
+        image.flags.writeable = True                   # Image is now writeable 
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # COLOR COVERSION RGB 2 BGR
+        return image, results
+    
+    cap = cv2.VideoCapture(sample)
+    feat_list = []
+    # Set mediapipe model 
+    with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+        while cap.isOpened():
+
+            # Read feed
+            ret, frame = cap.read()
+
+            try :
+                frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
+                image, results = mediapipe_detection(frame, holistic)
+                feat_list.append(results)
+            except:
+                cap.release()
+                return np.array([extract_keypoints(results) for result in feat_list])
+
+def get_frame_feature(sample):
+    mp_holistic = mp.solutions.holistic # Holistic model
+    mp_drawing = mp.solutions.drawing_utils # Drawing utilities
 
 
+    def mediapipe_detection(image, model):
+    
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
+        image.flags.writeable = False                  # Image is no longer writeable
+        results = model.process(image)                 # Make prediction
+        image.flags.writeable = True                   # Image is now writeable 
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # COLOR COVERSION RGB 2 BGR
+        return image, results
+    
+    frame = cv2.imread(sample)
+    # Set mediapipe model 
+    with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+        try :
+            frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
+            image, results = mediapipe_detection(frame, holistic)
+            return results
+        except:
+            return np.zeros((1,1662))
+
+
+
+frame_meta = []
+frame_label = []
+for idx,(word, frame) in enumerate(zip(frame_data["Word"],frame_data["Frames path"])):
+    if idx%10 == 0:
+        print(f"processed frames {idx} remaining {frame_data.shape[0]-idx}")
+    frame_meta.append(extract_keypoints(get_frame_feature(frame)))
+    frame_label.append(word)
+
+frame_meta = np.array(frame_meta)
+    
+    
+
+
+
+if EXTRACT_FEATURE_VIDEO == True:
 
     lab_det = []
     feat_fname = []
@@ -220,5 +260,62 @@ if EXTRACT_FEATURE == True:
     pd.DataFrame(np.array([lab_det,feat_fname]).transpose(),columns=['label','stored feature']).to_csv('feature_details.csv')
 
 FEATURE_PATH =  'features'  
+
+
+feature_data = pd.read_csv('feature_details.csv')
+
+label_video = feature_data['label']
+meta_video= feature_data['stored feature']
+
+meta_data = []
+for file in meta_video:
+    meta_data.append(np.load(file))
+
+shp = [da.shape[0] for da in meta_data]
+
+
+
+
+meta_data = np.array(meta_data)
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from keras.utils import to_categorical
+
+enc =  LabelEncoder()
+word_enc = LabelEncoder()
+y_int =enc.fit_transform(label)
+y_int_frame = word_enc.fit_transform(frame_label)
+
+y = to_categorical(y_int)
+y_frame = to_categorical(y_int_frame)
+
+fdata = np.expand_dims(frame_meta,axis=1)
+
+X_train, X_test, y_train, y_test = train_test_split(fdata, y_frame, test_size=0.4)
+
+
+from keras.models import Sequential
+from keras.layers import LSTM, Dense
+from keras.callbacks import TensorBoard
+
+
+log_dir = os.path.join('Logs')
+tb_callback = TensorBoard(log_dir=log_dir)
+
+
+model = Sequential()
+model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(1,1662)))
+model.add(LSTM(128, return_sequences=True, activation='relu'))
+model.add(LSTM(64, return_sequences=False, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(y_train.shape[1], activation='softmax'))
+
+model.summary()
+
+model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+
+model.fit(fdata, y_frame, epochs=1000, callbacks=[tb_callback])
 
 
