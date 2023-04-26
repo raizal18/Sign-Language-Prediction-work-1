@@ -339,11 +339,10 @@ def read_test_data(sample, model, word_enc):
                     cv2.destroyAllWindows()
                      
                     break
+SHOW_VIDEOS = False
+if SHOW_VIDEOS == True:
+    n = 120
 
+    read_test_data(video_labelled['video location'][n], model, word_enc)
 
-
-n = 27
-
-read_test_data(video_labelled['video location'][n], model, word_enc)
-
-print(f"original {video_labelled['label'][n]}")
+    print(f"original {video_labelled['label'][n]}")
