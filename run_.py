@@ -342,29 +342,8 @@ def read_test_data(sample, model, word_enc):
 
 
 
-n = 19
+n = 27
 
 read_test_data(video_labelled['video location'][n], model, word_enc)
 
 print(f"original {video_labelled['label'][n]}")
-# y_prob = model.predict(test_data)
-
-# y_pred = word_enc.inverse_transform(np.argmax(y_prob, axis=1))
-
-
-
-# from collections import Counter
-
-# my_list = list(y_pred)
-# count = Counter(my_list)
-# new_list = [key for key, value in count.items() if value >= 5]
-# my_list.clear()
-# my_list.extend(new_list)
-# print(' '.join(my_list))
-# print(f"original {video_labelled['label'][n]}")
-
-
-
-
-
-
