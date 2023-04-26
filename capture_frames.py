@@ -276,36 +276,36 @@ if not os.path.exists('model.h5'):
     model.save('model.h5')
 
 
-def read_test_data():
-        mp_holistic = mp.solutions.holistic # Holistic model
-    mp_drawing = mp.solutions.drawing_utils # Drawing utilities
+def read_test_data(sample):
+    mp_holistic = mp.solutions.holistic 
+    mp_drawing = mp.solutions.drawing_utils 
 
+    cap = cv2.VideoCapture(sample)
 
-    cap = cv2.VideoCapture('input_video.mp4')
-
-    # Get the current FPS value
     fps = cap.get(cv2.CAP_PROP_FPS)
 
-    # Calculate the frame interval
     frame_interval = round(fps / 10)
+    list_frm = []
 
-    # Loop through each frame of the video
-    while cap.isOpened():
-        ret, frame = cap.read()
+    with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+        while cap.isOpened():
+            ret, frame = cap.read()
 
-        if ret:
+            if ret:
 
-            if cap.get(cv2.CAP_PROP_POS_FRAMES) % frame_interval == 0:
-                image, results = mediapipe_detection(frame, holistic)
-                return results
-        else:
-            break
+                if cap.get(cv2.CAP_PROP_POS_FRAMES) % frame_interval == 0:
+                    frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
+                    image, results = mediapipe_detection(frame, holistic)
+                    list_frm.append(results)
+            else:
+                    return np.array([extract_keypoints(rs) for rs in list_frm])
+                    break
 
 
 
 
 
-test_data =np.expand_dims(get_results(video_labelled['video location'][2]),axis=1)
+test_data =np.expand_dims(read_test_data(video_labelled['video location'][2]),axis=1)
 
 y_prob = model.predict(test_data)
 
