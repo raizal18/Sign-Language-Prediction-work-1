@@ -202,7 +202,7 @@ def get_results(sample):
                 feat_list.append(results)
             except:
                 cap.release()
-                return np.array([extract_keypoints(results) for result in feat_list])
+                return np.array([extract_keypoints(result) for result in feat_list])
 
 def get_frame_feature(sample):
     mp_holistic = mp.solutions.holistic # Holistic model
