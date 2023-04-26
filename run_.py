@@ -38,6 +38,30 @@ frame_data = word_frame.copy()
 
 frame_data["Frames path"] =  _MAIN_PATH +'/'+ frame_data["Frames path"]
 
+def draw_styled_landmarks(image, results):
+    mp_holistic = mp.solutions.holistic # Holistic model
+    mp_drawing = mp.solutions.drawing_utils # Drawing utilities
+    # Draw face connections
+    mp_drawing.draw_landmarks(image, results.face_landmarks, mp_holistic.FACEMESH_TESSELATION, 
+                            mp_drawing.DrawingSpec(color=(80,110,10), thickness=1, circle_radius=1), 
+                            mp_drawing.DrawingSpec(color=(80,256,121), thickness=1, circle_radius=1)
+                            ) 
+    # Draw pose connections
+    mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS,
+                            mp_drawing.DrawingSpec(color=(80,22,10), thickness=2, circle_radius=4), 
+                            mp_drawing.DrawingSpec(color=(80,44,121), thickness=2, circle_radius=2)
+                            ) 
+    # Draw left hand connections
+    mp_drawing.draw_landmarks(image, results.left_hand_landmarks, mp_holistic.HAND_CONNECTIONS, 
+                            mp_drawing.DrawingSpec(color=(121,22,76), thickness=2, circle_radius=4), 
+                            mp_drawing.DrawingSpec(color=(121,44,250), thickness=2, circle_radius=2)
+                            ) 
+    # Draw right hand connections  
+    mp_drawing.draw_landmarks(image, results.right_hand_landmarks, mp_holistic.HAND_CONNECTIONS, 
+                            mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=4), 
+                            mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
+                            ) 
+
 def get_feature(sample,sample_label):
     mp_holistic = mp.solutions.holistic # Holistic model
     mp_drawing = mp.solutions.drawing_utils # Drawing utilities
@@ -53,28 +77,7 @@ def get_feature(sample,sample_label):
         return image, results
 
 
-    def draw_styled_landmarks(image, results):
-        # Draw face connections
-        mp_drawing.draw_landmarks(image, results.face_landmarks, mp_holistic.FACEMESH_TESSELATION, 
-                                mp_drawing.DrawingSpec(color=(80,110,10), thickness=1, circle_radius=1), 
-                                mp_drawing.DrawingSpec(color=(80,256,121), thickness=1, circle_radius=1)
-                                ) 
-        # Draw pose connections
-        mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS,
-                                mp_drawing.DrawingSpec(color=(80,22,10), thickness=2, circle_radius=4), 
-                                mp_drawing.DrawingSpec(color=(80,44,121), thickness=2, circle_radius=2)
-                                ) 
-        # Draw left hand connections
-        mp_drawing.draw_landmarks(image, results.left_hand_landmarks, mp_holistic.HAND_CONNECTIONS, 
-                                mp_drawing.DrawingSpec(color=(121,22,76), thickness=2, circle_radius=4), 
-                                mp_drawing.DrawingSpec(color=(121,44,250), thickness=2, circle_radius=2)
-                                ) 
-        # Draw right hand connections  
-        mp_drawing.draw_landmarks(image, results.right_hand_landmarks, mp_holistic.HAND_CONNECTIONS, 
-                                mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=4), 
-                                mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
-                                ) 
-
+ 
     cap = cv2.VideoCapture(sample)
 
     # Set mediapipe model 
@@ -256,6 +259,7 @@ log_dir = os.path.join('Logs')
 tb_callback = TensorBoard(log_dir=log_dir)
 
 
+
 model = Sequential()
 model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(1,1662)))
 model.add(LSTM(128, return_sequences=True, activation='relu'))
@@ -268,15 +272,31 @@ model.summary()
 
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
+MODEL_RETRAIN = False
 
-model.fit(fdata, y_frame, epochs=1000, callbacks=[tb_callback])
+if MODEL_RETRAIN == True:
+    model.fit(fdata, y_frame, epochs=1000, callbacks=[tb_callback])
+else:
+    model = tf.keras.models.load_model('model.h5')
 
+sentence = []
+print('Testing Models in sentence data')
+for idx, test in enumerate(meta_data[1:276]):
+    sentence.append(' '.join(list(word_enc.inverse_transform(np.argmax(model.predict(np.expand_dims(test, axis=1)),axis=1)))))
+
+from confusion import confusion
+
+met = confusion(np.array(label_video[1:276]), np.array(sentence))
+
+cm = met.getmatrix()
+
+[acc, pre, rec, fsc] = met.metrics()
 
 if not os.path.exists('model.h5'):
     model.save('model.h5')
 
 
-def read_test_data(sample):
+def read_test_data(sample, model, word_enc):
     mp_holistic = mp.solutions.holistic 
     mp_drawing = mp.solutions.drawing_utils 
 
@@ -284,7 +304,7 @@ def read_test_data(sample):
 
     fps = cap.get(cv2.CAP_PROP_FPS)
 
-    frame_interval = round(fps / 10)
+    frame_interval = round(fps / 24)
     list_frm = []
 
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
@@ -296,18 +316,55 @@ def read_test_data(sample):
                 if cap.get(cv2.CAP_PROP_POS_FRAMES) % frame_interval == 0:
                     frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
                     image, results = mediapipe_detection(frame, holistic)
-                    list_frm.append(results)
-            else:
-                    return np.array([extract_keypoints(rs) for rs in list_frm])
+                    # print(extract_keypoints(results))
+                    pred = word_enc.inverse_transform(np.argmax(model.predict(np.expand_dims(np.expand_dims(extract_keypoints(results),axis=0), axis=1)),axis=1))
+                    draw_styled_landmarks(image,results)
+                    org = (5, 40)
+                    fontScale = 1
+                    color = (38, 249, 255)
+                    thickness = 1
+                    font = cv2.FONT_HERSHEY_COMPLEX
+                    image = cv2.putText(image,f"sign: {pred}", org, font, 
+                                    fontScale, color, thickness, cv2.LINE_AA)
+    
+                    cv2.imshow('test data', image)
+                    
+                    if cv2.waitKey(10) & 0xFF == ord('q'):
+                        cap.release()
+                        cv2.destroyAllWindows()
+                        break
+                    
+            else:    
+                    cap.release()
+                    cv2.destroyAllWindows()
+                     
                     break
 
 
 
+n = 19
+
+read_test_data(video_labelled['video location'][n], model, word_enc)
+
+print(f"original {video_labelled['label'][n]}")
+# y_prob = model.predict(test_data)
+
+# y_pred = word_enc.inverse_transform(np.argmax(y_prob, axis=1))
 
 
-test_data =np.expand_dims(read_test_data(video_labelled['video location'][2]),axis=1)
 
-y_prob = model.predict(test_data)
+# from collections import Counter
 
-y_pred = word_enc.inverse_transform(np.argmax(y_prob, axis=1))
+# my_list = list(y_pred)
+# count = Counter(my_list)
+# new_list = [key for key, value in count.items() if value >= 5]
+# my_list.clear()
+# my_list.extend(new_list)
+# print(' '.join(my_list))
+# print(f"original {video_labelled['label'][n]}")
+
+
+
+
+
 
