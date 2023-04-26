@@ -29,19 +29,6 @@ for root, direct, files in os.walk(files_path):
 
 video_labelled = pd.DataFrame(list(zip(file_url,class_description)),columns=["video location", "label"])
 
-# loc = video_labelled['video location'].values
-
-# videos_tot_frames = []
-# videos_fps = []
-# for url in loc:
-#     vid = cv2.VideoCapture(str(url))
-
-#     tot_frames = vid.get(cv2.CAP_PROP_FRAME_COUNT)
-
-#     per_sec = vid.get(cv2.CAP_PROP_FPS)
-
-#     videos_tot_frames.append(tot_frames)
-#     videos_fps.append(per_sec)
 
 # ## import frames for words labelled
 
@@ -50,28 +37,6 @@ word_frame = pd.read_excel(os.path.join(DATA_PATH,'corpus_csv_files','ISL_CSLRT_
 frame_data = word_frame.copy()
 
 frame_data["Frames path"] =  _MAIN_PATH +'/'+ frame_data["Frames path"]
-
-
-
-# image_gen = ImageDataGenerator(rescale=1. / 255)
-
-# imds = image_gen.flow_from_dataframe(dataframe = frame_data, 
-# x_col = "Frames path",
-# y_col = "Word",
-# target_size = (224, 224), color_mode='rgb')
-
-
-# # [im, lab] = imds.next()
-
-
-# # for i in range(1,26):
-# #     plt.subplot(5, 5, i)
-
-# #     plt.imshow(im[i])
-# #     plt.title([j for j in imds.class_indices if imds.class_indices[j]==np.argmax(lab[i],axis=0)])
-# # plt.show(block=False)
-
-
 
 def get_feature(sample,sample_label):
     mp_holistic = mp.solutions.holistic # Holistic model
@@ -165,6 +130,14 @@ sample_label = video_labelled['label'].values[17]
 get_feature(sample,sample_label)
 
 EXTRACT_FEATURE_VIDEO =False
+def mediapipe_detection(image, model):
+
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
+    image.flags.writeable = False                  # Image is no longer writeable
+    results = model.process(image)                 # Make prediction
+    image.flags.writeable = True                   # Image is now writeable 
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # COLOR COVERSION RGB 2 BGR
+    return image, results
 
 def extract_keypoints(results):
     pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
@@ -174,20 +147,11 @@ def extract_keypoints(results):
     return np.concatenate([pose, face, lh, rh])
 
 def get_results(sample):
+
     mp_holistic = mp.solutions.holistic # Holistic model
-    mp_drawing = mp.solutions.drawing_utils # Drawing utilities
-
-
-    def mediapipe_detection(image, model):
-    
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
-        image.flags.writeable = False                  # Image is no longer writeable
-        results = model.process(image)                 # Make prediction
-        image.flags.writeable = True                   # Image is now writeable 
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # COLOR COVERSION RGB 2 BGR
-        return image, results
-    
+    mp_drawing = mp.solutions.drawing_utils # Drawing utilities    
     cap = cv2.VideoCapture(sample)
+    cap.set(cv2.CAP_PROP_FPS, 10)
     feat_list = []
     # Set mediapipe model 
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
@@ -207,17 +171,6 @@ def get_results(sample):
 def get_frame_feature(sample):
     mp_holistic = mp.solutions.holistic # Holistic model
     mp_drawing = mp.solutions.drawing_utils # Drawing utilities
-
-
-    def mediapipe_detection(image, model):
-    
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
-        image.flags.writeable = False                  # Image is no longer writeable
-        results = model.process(image)                 # Make prediction
-        image.flags.writeable = True                   # Image is now writeable 
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # COLOR COVERSION RGB 2 BGR
-        return image, results
-    
     frame = cv2.imread(sample)
     # Set mediapipe model 
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
@@ -321,6 +274,36 @@ model.fit(fdata, y_frame, epochs=1000, callbacks=[tb_callback])
 
 if not os.path.exists('model.h5'):
     model.save('model.h5')
+
+
+def read_test_data():
+        mp_holistic = mp.solutions.holistic # Holistic model
+    mp_drawing = mp.solutions.drawing_utils # Drawing utilities
+
+
+    cap = cv2.VideoCapture('input_video.mp4')
+
+    # Get the current FPS value
+    fps = cap.get(cv2.CAP_PROP_FPS)
+
+    # Calculate the frame interval
+    frame_interval = round(fps / 10)
+
+    # Loop through each frame of the video
+    while cap.isOpened():
+        ret, frame = cap.read()
+
+        if ret:
+
+            if cap.get(cv2.CAP_PROP_POS_FRAMES) % frame_interval == 0:
+                image, results = mediapipe_detection(frame, holistic)
+                return results
+        else:
+            break
+
+
+
+
 
 test_data =np.expand_dims(get_results(video_labelled['video location'][2]),axis=1)
 
