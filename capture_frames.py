@@ -319,3 +319,12 @@ model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accur
 model.fit(fdata, y_frame, epochs=1000, callbacks=[tb_callback])
 
 
+if not os.path.exists('model.h5'):
+    model.save('model.h5')
+
+test_data =np.expand_dims(get_results(video_labelled['video location'][2]),axis=1)
+
+y_prob = model.predict(test_data)
+
+y_pred = word_enc.inverse_transform(np.argmax(y_prob, axis=1))
+
