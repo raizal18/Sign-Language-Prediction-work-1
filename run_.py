@@ -239,7 +239,7 @@ from keras.utils import to_categorical
 
 enc =  LabelEncoder()
 word_enc = LabelEncoder()
-y_int =enc.fit_transform(label)
+y_int =enc.fit_transform(label_video)
 y_int_frame = word_enc.fit_transform(frame_label)
 
 y = to_categorical(y_int)
