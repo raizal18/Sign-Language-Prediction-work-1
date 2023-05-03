@@ -151,7 +151,7 @@ for feature, label in zip(action_data, lab):
     if label not in rm_values:
         X.append(feature)
         Y.append(label)
-X = np.array(X)
+X = np.squeeze(np.array(X))
 Y = np.array(Y)
 
 
@@ -173,11 +173,11 @@ Y_one = to_categorical(Y_int)
 x_train, x_test, y_train, y_test = train_test_split(X,Y_one, test_size = 0.40)
 
 inputs = Input(shape=(600,))
-conv1 = Conv1D(100,6)(inputs)
-relu1 = ReLU()(conv1)
-conv2 = Conv1D(100,6)(relu1)
-dens1 = Dense(100, activation = 'relu')(conv2)
-smax = Dense(np.unique(y_train).shape[0], activation ='softmax')(dens1)
+# conv1 = Conv1D(100,6)
+# relu1 = ReLU()(conv1)
+# conv2 = Conv1D(100,6)(relu1)
+dens1 = Dense(100, activation = 'relu')(inputs)
+smax = Dense(y_train.shape[1], activation ='softmax')(dens1)
 
 mod = Model(inputs = inputs, outputs = smax)
 
