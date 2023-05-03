@@ -114,16 +114,20 @@ inputs = tf.keras.layers.Input(
 outputs = encoder(dict(image=inputs))
 
 model = tf.keras.Model(inputs, outputs, name='movinet')
+capture_action = False
 
-print(f"start time {time.asctime()}")
+if capture_action == True:
 
-for idx, (file, label) in enumerate(zip(video_labelled['video location'],video_labelled['label'])):
+    print(f"start time {time.asctime()}")
 
-    if (idx > 53) & (idx % 2 == 0):        
+    for idx, (file, label) in enumerate(zip(video_labelled['video location'],video_labelled['label'])):
+
+        # if (idx > 53) & (idx % 2 == 0):        
         sample_video = frames_from_video_file(file,output_size=(224, 224),n_frames=5,frame_step=8)
         example_output = model(np.expand_dims(sample_video,axis=0))
         np.save(f"action/{idx}.npy", example_output)
         print(f"{idx} time taken {time.asctime()} ")
+
 
 
 print(example_output)

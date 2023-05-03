@@ -116,14 +116,74 @@ outputs = encoder(dict(image=inputs))
 model = tf.keras.Model(inputs, outputs, name='movinet')
 
 
-print(f"start time {time.asctime()}")
+capture_action = False
 
-for idx, (file, label) in enumerate(zip(video_labelled['video location'],video_labelled['label'])):
-    if (idx > 53) & (idx % 2 != 0):
+if capture_action == True:
 
+    print(f"start time {time.asctime()}")
+
+    for idx, (file, label) in enumerate(zip(video_labelled['video location'],video_labelled['label'])):
+
+        # if (idx > 53) & (idx % 2 == 0):        
         sample_video = frames_from_video_file(file,output_size=(224, 224),n_frames=5,frame_step=8)
         example_output = model(np.expand_dims(sample_video,axis=0))
         np.save(f"action/{idx}.npy", example_output)
         print(f"{idx} time taken {time.asctime()} ")
 
-print(example_output)
+action_data = [] 
+
+for i in range(0,687):
+    tmp = np.load(f"action/{i}.npy")
+    action_data.append(tmp)
+
+action_data = np.array(action_data)
+
+lab = video_labelled['label'].values
+
+uni, counts = np.unique(lab, return_counts = True)
+
+
+rm_values = uni[counts<7]
+
+X = []
+Y = []
+for feature, label in zip(action_data, lab):
+    if label not in rm_values:
+        X.append(feature)
+        Y.append(label)
+X = np.array(X)
+Y = np.array(Y)
+
+
+
+
+
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Conv1D, Dense, Softmax, ReLU, Input
+from keras.models import Model
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+
+enc = LabelEncoder().fit(Y)
+Y_int = enc.transform(Y)
+
+from keras.utils import to_categorical
+
+Y_one = to_categorical(Y_int)
+x_train, x_test, y_train, y_test = train_test_split(X,Y_one, test_size = 0.40)
+
+inputs = Input(shape=(1, 600))
+conv1 = Conv1D(200,3)(inputs)
+relu1 = ReLU()(conv1)
+conv2 = Conv1D(100,6)(relu1)
+dens1 = Dense(100, activation = 'relu')(conv2)
+smax = Dense(np.unique(y_train).shape[0], activation ='softmax')(dens1)
+
+mod = Model(inputs = inputs, outputs = smax)
+
+mod.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+              metrics=[tf.keras.metrics.CategoricalAccuracy(),
+                       tf.keras.metrics.FalseNegatives()])
+
+hist = mod.fit(x_train, y_train, epochs=10, verbose=1)
