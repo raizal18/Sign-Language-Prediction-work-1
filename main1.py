@@ -172,8 +172,8 @@ from keras.utils import to_categorical
 Y_one = to_categorical(Y_int)
 x_train, x_test, y_train, y_test = train_test_split(X,Y_one, test_size = 0.40)
 
-inputs = Input(shape=(1, 600))
-conv1 = Conv1D(200,3)(inputs)
+inputs = Input(shape=(600,))
+conv1 = Conv1D(100,6)(inputs)
 relu1 = ReLU()(conv1)
 conv2 = Conv1D(100,6)(relu1)
 dens1 = Dense(100, activation = 'relu')(conv2)
