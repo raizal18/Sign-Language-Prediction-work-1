@@ -25,7 +25,6 @@ for root, direct, files in os.walk(files_path):
         for lab,url in zip([root.split('/')[-1] for i in files],files):
             class_description.append(lab)
             file_url.append(os.path.join(root,url))
-global video_labelled
 
 video_labelled = pd.DataFrame(list(zip(file_url,class_description)),columns=["video location", "label"])
 
@@ -122,23 +121,21 @@ def _action_extract(video_path):
     return example_output
 
 def video_demo(video):
-
-    cap = cv2.VideoCapture(video)
-    fps = cap.get(cv2.CAP_PROP_FPS)      # OpenCV v2.x used "CV_CAP_PROP_FPS"
-    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    duration = frame_count/fps
     video = norm(video)
-    global video_labelled
-    try:
-        for num, loc in enumerate(video_labelled['video location']):
-            print(video)
-            if norm(loc).split('/')[-1] == video.split('/')[-1]:
-                prob = sign_predictor.predict(np.load(f"action/{num}.npy"))
-    except:
+    global pre, indx
+    pre = False
+    for num, loc in enumerate(video_labelled['video location']):
+        if norm(loc).split('/')[-1] == video.split('/')[-1]:
+            pre = True
+            indx = num
+    if pre :
+        prob = sign_predictor.predict(np.load(f"action/{num}.npy"))
+        text = enc[np.argmax(prob, axis=1)[0]]
+    else :
         prob = sign_predictor.predict(_action_extract(video))
-    
-    text = enc[np.argmax(prob, axis=1)[0]]
+        text = enc[np.argmax(prob, axis=1)[0]]
     return video, text
+
 
 
 demo = gr.Interface(
