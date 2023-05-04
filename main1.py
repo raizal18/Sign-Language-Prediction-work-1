@@ -16,9 +16,19 @@ import pandas as pd
 from numpy import random
 from keras.preprocessing.image import ImageDataGenerator
 from main import _MAIN_PATH, DATA_PATH, content_directory, video_path, details, info_csv 
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Conv1D, Dense, Softmax, ReLU, Input
+from keras.models import Model
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from keras import layers
+from keras.models import load_model
 import mediapipe as mp
 import logging
+
+#import  Speech Engine 
+
+import pyttsx3
 
 mpl.rcParams.update({
     'font.size': 10,
@@ -234,14 +244,6 @@ Y = np.array(Y)
 
 
 
-
-
-from sklearn.model_selection import train_test_split
-from keras.models import Sequential
-from keras.layers import Conv1D, Dense, Softmax, ReLU, Input
-from keras.models import Model
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-
 enc = LabelEncoder().fit(Y)
 Y_int = enc.transform(Y)
 
@@ -277,7 +279,6 @@ action = _action_extract(test_video)
 
 test_pred = mod.predict(action)
 
-read_test_data(test_video)
 text = list(enc.inverse_transform(np.argmax(test_pred, axis=1)))
 
 def show_sign_prediction(sample, ):
