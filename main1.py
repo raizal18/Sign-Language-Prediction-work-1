@@ -89,20 +89,46 @@ def frames_from_video_file(video_path, n_frames, output_size = (224,224), frame_
   result = np.array(result)[..., [2, 1, 0]]
 
   return result
+def draw_styled_landmarks(image, results):
+    mp_holistic = mp.solutions.holistic # Holistic model
+    mp_drawing = mp.solutions.drawing_utils # Drawing utilities
+    # Draw face connections
+    mp_drawing.draw_landmarks(image, results.face_landmarks, mp_holistic.FACEMESH_TESSELATION, 
+                            mp_drawing.DrawingSpec(color=(80,110,10), thickness=1, circle_radius=1), 
+                            mp_drawing.DrawingSpec(color=(80,256,121), thickness=1, circle_radius=1)
+                            ) 
+    # Draw pose connections
+    mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS,
+                            mp_drawing.DrawingSpec(color=(80,22,10), thickness=2, circle_radius=4), 
+                            mp_drawing.DrawingSpec(color=(80,44,121), thickness=2, circle_radius=2)
+                            ) 
+    # Draw left hand connections
+    mp_drawing.draw_landmarks(image, results.left_hand_landmarks, mp_holistic.HAND_CONNECTIONS, 
+                            mp_drawing.DrawingSpec(color=(121,22,76), thickness=2, circle_radius=4), 
+                            mp_drawing.DrawingSpec(color=(121,44,250), thickness=2, circle_radius=2)
+                            ) 
+    # Draw right hand connections  
+    mp_drawing.draw_landmarks(image, results.right_hand_landmarks, mp_holistic.HAND_CONNECTIONS, 
+                            mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=4), 
+                            mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2)
+                            ) 
 
 
-sample_video = frames_from_video_file(video_labelled['video location'][2],output_size=(224, 224),n_frames=5,frame_step=8)
+play_sample = False
 
-for im in sample_video:
-    cv2.imshow('frame', im)
-    if cv2.waitKey(100) & 0xFF == ord('q'):
-        break
+if play_sample == True:
+  sample_video = frames_from_video_file(video_labelled['video location'][2],output_size=(224, 224),n_frames=5,frame_step=8)
 
-cv2.destroyAllWindows()
+  for im in sample_video:
+      cv2.imshow('frame', im)
+      if cv2.waitKey(100) & 0xFF == ord('q'):
+          break
+
+  cv2.destroyAllWindows()
 
 hub_url = "movinet_a2/3"
 
-encoder = hub.KerasLayer("movinet_a2\3", trainable=True)
+encoder = hub.KerasLayer("movinet_a2/3", trainable=True)
 
 inputs = tf.keras.layers.Input(
     shape=[None, None, None, 3],
@@ -130,8 +156,60 @@ if capture_action == True:
         np.save(f"action/{idx}.npy", example_output)
         print(f"{idx} time taken {time.asctime()} ")
 
-action_data = [] 
+def mediapipe_detection(image, model):
 
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # COLOR CONVERSION BGR 2 RGB
+    image.flags.writeable = False                  # Image is no longer writeable
+    results = model.process(image)                 # Make prediction
+    image.flags.writeable = True                   # Image is now writeable 
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) # COLOR COVERSION RGB 2 BGR
+    return image, results
+
+def read_test_data(sample):
+    mp_holistic = mp.solutions.holistic 
+    mp_drawing = mp.solutions.drawing_utils 
+
+    cap = cv2.VideoCapture(sample)
+
+    fps = cap.get(cv2.CAP_PROP_FPS)
+
+    frame_interval = round(fps / 24)
+    list_frm = []
+
+    with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+        while cap.isOpened():
+            ret, frame = cap.read()
+
+            if ret:
+
+                if cap.get(cv2.CAP_PROP_POS_FRAMES) % frame_interval == 0:
+                    frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
+                    image, results = mediapipe_detection(frame, holistic)
+                    draw_styled_landmarks(image, results)
+                    cv2.imshow('test data', image)
+                    
+                    if cv2.waitKey(10) & 0xFF == ord('q'):
+                        cap.release()
+                        cv2.destroyAllWindows()
+                        break
+                    
+            else:    
+                    cap.release()
+                    cv2.destroyAllWindows()
+                     
+                    break
+
+def _action_extract(video_path):
+
+    print(f"start time {time.asctime()}")
+    # if (idx > 53) & (idx % 2 == 0):        
+    sample_video = frames_from_video_file(video_path, output_size=(224, 224),n_frames=5,frame_step=8)
+    example_output = model(np.expand_dims(sample_video,axis=0))
+    print(f"time taken {time.asctime()} ")
+    return example_output
+
+
+action_data = [] 
 for i in range(0,687):
     tmp = np.load(f"action/{i}.npy")
     action_data.append(tmp)
@@ -173,17 +251,57 @@ Y_one = to_categorical(Y_int)
 x_train, x_test, y_train, y_test = train_test_split(X,Y_one, test_size = 0.40)
 
 inputs = Input(shape=(600,))
-# conv1 = Conv1D(100,6)
-# relu1 = ReLU()(conv1)
-# conv2 = Conv1D(100,6)(relu1)
-dens1 = Dense(100, activation = 'relu')(inputs)
-smax = Dense(y_train.shape[1], activation ='softmax')(dens1)
+conv1 = Conv1D(100,6)
+relu1 = ReLU()(conv1)
+conv2 = Conv1D(100,6)(relu1)
+dens1 = Dense(300, activation = 'relu')(inputs)
+dens2 = Dense(100, activation = 'relu')(dens1)
+smax = Dense(y_train.shape[1], activation ='softmax')(dens2)
 
 mod = Model(inputs = inputs, outputs = smax)
 
 mod.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+              loss=tf.keras.losses.CategoricalCrossentropy(),
               metrics=[tf.keras.metrics.CategoricalAccuracy(),
                        tf.keras.metrics.FalseNegatives()])
 
-hist = mod.fit(x_train, y_train, epochs=10, verbose=1)
+hist = mod.fit(X, Y_one, epochs=100, verbose=1)
+
+mod.evaluate(x_test, y_test)
+
+
+test_video = video_labelled['video location'][50]
+test_label = video_labelled['label'][50]
+
+action = _action_extract(test_video)
+
+test_pred = mod.predict(action)
+
+read_test_data(test_video)
+text = list(enc.inverse_transform(np.argmax(test_pred, axis=1)))
+
+def show_sign_prediction(sample, ):
+    mp_holistic = mp.solutions.holistic 
+    cap = cv2.VideoCapture(sample)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    frame_interval = round(fps / 24)
+    while cap.isOpened():
+        ret, frame = cap.read()
+
+        if ret:
+
+            if cap.get(cv2.CAP_PROP_POS_FRAMES) % frame_interval == 0:
+                frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
+                cv2.imshow('test data', frame)
+                
+                if cv2.waitKey(10) & 0xFF == ord('q'):
+                    cap.release()
+                    cv2.destroyAllWindows()
+                    break
+                
+        else:    
+                cap.release()
+                cv2.destroyAllWindows()
+                  
+                break
+
