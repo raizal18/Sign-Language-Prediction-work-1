@@ -151,8 +151,8 @@ demo = gr.Interface(
     ],
     examples=[
         video_labelled['video location'][2],
-        video_labelled['video location'][3],
-        video_labelled['video location'][5],
+        video_labelled['video location'][50],
+        video_labelled['video location'][120],
     ],
 )
 
