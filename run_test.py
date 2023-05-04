@@ -25,13 +25,13 @@ for root, direct, files in os.walk(files_path):
         for lab,url in zip([root.split('/')[-1] for i in files],files):
             class_description.append(lab)
             file_url.append(os.path.join(root,url))
+global video_labelled
 
 video_labelled = pd.DataFrame(list(zip(file_url,class_description)),columns=["video location", "label"])
 
-with open('encode.pkl', 'rb') as f:
-    enc = pickle.load(f) 
+enc = np.load('encoder.npy', allow_pickle=1)[1]
 
-
+norm = lambda loc : '/'.join(['/'.join(i.split('\\')) for i in loc.split('/')])
 
 def create_subtitles(words, video_duration, filename):
 
@@ -127,12 +127,18 @@ def video_demo(video):
     fps = cap.get(cv2.CAP_PROP_FPS)      # OpenCV v2.x used "CV_CAP_PROP_FPS"
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     duration = frame_count/fps
-    prob = sign_predictor.predict(_action_extract(video))
-    text = enc.inverse_transform(np.argmax(prob, axis=1))
-    sub = create_subtitles(text[0].split(' '), duration, 'files/output.srt')
-    s3 = os.path.join(os.path.abspath(''), "files/output.srt")
-    return [video,s3], text[0]
-
+    video = norm(video)
+    global video_labelled
+    try:
+        for num, loc in enumerate(video_labelled['video location']):
+            print(video)
+            if norm(loc).split('/')[-1] == video.split('/')[-1]:
+                prob = sign_predictor.predict(np.load(f"action/{num}.npy"))
+    except:
+        prob = sign_predictor.predict(_action_extract(video))
+    
+    text = enc[np.argmax(prob, axis=1)[0]]
+    return video, text
 
 
 demo = gr.Interface(
@@ -150,5 +156,8 @@ demo = gr.Interface(
     ],
 )
 
+
+
 if __name__ == "__main__":
     demo.launch()
+

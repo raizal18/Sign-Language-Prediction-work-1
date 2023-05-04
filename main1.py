@@ -242,23 +242,28 @@ for feature, label in zip(action_data, lab):
 X = np.squeeze(np.array(X))
 Y = np.array(Y)
 
+unique_val = np.unique(Y)
+class_indices = {k:v for v,k in enumerate(unique_val)}
 
+inverse_key = {k:v for k,v in enumerate(unique_val)}
 
-enc = LabelEncoder().fit(Y)
-Y_int = enc.transform(Y)
+np.save('encoder.npy', [class_indices, inverse_key])
+Y_int = np.array([class_indices[clss] for clss in Y])
+
 
 from keras.utils import to_categorical
 
 Y_one = to_categorical(Y_int)
+
 x_train, x_test, y_train, y_test = train_test_split(X,Y_one, test_size = 0.40)
 
 inputs = Input(shape=(600,))
-conv1 = Conv1D(100,6)
-relu1 = ReLU()(conv1)
-conv2 = Conv1D(100,6)(relu1)
+# conv1 = Conv1D(100,6)
+# relu1 = ReLU()(conv1)
+# conv2 = Conv1D(100,6)(relu1)
 dens1 = Dense(300, activation = 'relu')(inputs)
 dens2 = Dense(100, activation = 'relu')(dens1)
-smax = Dense(y_train.shape[1], activation ='softmax')(dens2)
+smax = Dense(Y_one.shape[1], activation ='softmax')(dens2)
 
 mod = Model(inputs = inputs, outputs = smax)
 
@@ -267,19 +272,22 @@ mod.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
               metrics=[tf.keras.metrics.CategoricalAccuracy(),
                        tf.keras.metrics.FalseNegatives()])
 
-hist = mod.fit(X, Y_one, epochs=100, verbose=1)
+hist = mod.fit(X, Y_one, epochs=1000, verbose=1)
 
 mod.evaluate(x_test, y_test)
 
+for i in range(80,120):
+  test_video = video_labelled['video location'][i]
+  test_label = video_labelled['label'][i]
 
-test_video = video_labelled['video location'][50]
-test_label = video_labelled['label'][50]
+  action = _action_extract(test_video)
 
-action = _action_extract(test_video)
+  test_pred = mod.predict(action)
 
-test_pred = mod.predict(action)
+  pred_label = inverse_key[np.argmax(test_pred,axis=1)[0]]
 
-text = list(enc.inverse_transform(np.argmax(test_pred, axis=1)))
+  print(f"{test_label} -> {pred_label}")
+# text = list(enc.inverse_transform(np.argmax(test_pred, axis=1)))
 
 def show_sign_prediction(sample, ):
     mp_holistic = mp.solutions.holistic 

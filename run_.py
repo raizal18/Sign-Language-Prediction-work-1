@@ -339,6 +339,8 @@ def read_test_data(sample, model, word_enc):
                     cv2.destroyAllWindows()
                      
                     break
+
+
 SHOW_VIDEOS = False
 if SHOW_VIDEOS == True:
     n = 120
