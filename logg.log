@@ -1,2 +1,1 @@
 root - WARNING - This message will get logged on to a file
-tensorflow - WARNING - Model was constructed with shape (None, 392, 256) for input KerasTensor(type_spec=TensorSpec(shape=(None, 392, 256), dtype=tf.float32, name='input_4'), name='input_4', description="created by layer 'input_4'"), but it was called on an input with incompatible shape (None, 392, 256, 1, 1).

@@ -8,7 +8,6 @@ import os
 import PIL
 import cv2
 import tensorflow as tf
-import tensorflow_hub as hub
 import tqdm
 import shutil
 import glob
@@ -129,29 +128,30 @@ except FileNotFoundError:
 
 
 vid_feat = []
-
+i_bar = Progbar(video_labelled.shape[0])
 for idx, i in enumerate(range(video_labelled.shape[0])):
 
-    vid_feat.append(np.reshape(np.load(f"feat/{format(idx,'03d')}.npy"),(392,256)))
+    vid_feat.append(np.expand_dims(np.reshape(np.load(f"feat/{format(idx,'03d')}.npy"),(392,256)),axis=-1))
+    i_bar.update(idx)
 
 vid_feat = np.array(vid_feat)
 
-x_train, x_test, y_train, y_test = train_test_split(vid_feat, train_df['tag'].values, test_size=0.3)
 
-
-
+x_train, x_test, y_train, y_test = train_test_split(vid_feat, train_df['tag'].values, test_size=0.4)
 
 label_int = np.array([enc[inst] for inst in train_df['tag'].values])
 
 label_one = to_categorical(label_int)
-batch_size = 5
 
+
+
+batch_size = 5
 
 dataset = tf.data.Dataset.from_tensor_slices((vid_feat,label_one))
 
 dataset = dataset.batch(batch_size)
 
-model.fit(dataset, epochs=10)
+history = model.fit(dataset, epochs=10)
 
 
 
