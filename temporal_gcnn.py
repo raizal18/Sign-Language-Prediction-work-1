@@ -1,7 +1,7 @@
 import tensorflow as tf
 from keras.layers import Input, Conv2D, MaxPooling2D, Dropout, Flatten, Dense
 from keras.models import Model
-input_shape = (382, 256)
+input_shape = (392, 256,1)
 num_nodes = 16
 
 
@@ -18,7 +18,7 @@ class STGCN(tf.keras.layers.Layer):
             self.pooling_layers.append(MaxPooling2D(pool_size=(1, 2)))
     
     def call(self, inputs):
-        x = tf.expand_dims(inputs, axis=-1)
+        # x = tf.expand_dims(inputs, axis=-1)
         for i, conv_layer in enumerate(self.conv_layers):
             x = tf.transpose(x, perm=[0, 1, 3, 2])
             x = tf.reshape(x, [-1, self.num_nodes, x.shape[2], x.shape[3]])
@@ -49,8 +49,8 @@ class STCN(tf.keras.layers.Layer):
 
 def create_model(input_shape, filters):
     inputs = Input(shape=input_shape)
-    x = tf.expand_dims(inputs, axis=-1)
-    x = STCN(filters=filters)(x)
+    # x = tf.expand_dims(inputs, axis=-1)
+    x = STCN(filters=filters)(inputs)
     x = Dense(128, activation='relu')(x)
     x = Dropout(0.5)(x)
     outputs = Dense(101, activation='softmax')(x)

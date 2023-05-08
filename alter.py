@@ -25,6 +25,7 @@ import logging
 from keras.utils import Progbar
 from temporal_gcnn import model
 
+EXTRACT_FEATURE_FROM_SCRATCH  = False
 
 mpl.rcParams.update({
     'font.size': 10,
@@ -62,8 +63,55 @@ for idx,path in enumerate(train_df['path']):
 
 # get encoder 
 
-enc = np.load('encoder.npy', allow_pickle=True)[0]
+if EXTRACT_FEATURE_FROM_SCRATCH == True:
 
+    for idx, (path, label) in enumerate(zip(train_df['path'], train_df['tag'])):
+        if not idx<0:
+            print(idx)
+            # Load video
+            cap = cv2.VideoCapture(path)
+
+            # Define frame rate
+            frame_rate = 1  # read one frame every second
+
+            # Initialize variables
+            features = []
+            maxf = 1
+            # Loop through frames
+            while cap.isOpened():
+                # Read frame
+                ret, frame = cap.read()
+                maxf += 1
+                # Check if frame was read successfully
+                if maxf >100:
+                    break
+                if not ret:
+                    break
+
+                # Resize frame to match input size of InceptionV3 model
+                resized_frame = cv2.resize(frame, (224, 224))
+
+                # Preprocess frame to match input format of InceptionV3 model
+                preprocessed_frame = preprocess_input(resized_frame)
+
+                # Extract features from frame using InceptionV3 model
+                features.append(model.predict(np.array([preprocessed_frame]),verbose=0))
+
+                # Skip frames to match frame rate
+                cap.set(cv2.CAP_PROP_POS_FRAMES, cap.get(cv2.CAP_PROP_POS_FRAMES) + frame_rate)
+
+            # Aggregate features from all frames
+            features = np.concatenate(features, axis=0)
+            
+            da = [fm.flatten() for fm in features]
+            arr_list_2d = [arr.reshape(1, -1) for arr in da]
+            np.save(os.path.join('/content/drive/MyDrive/feat' , f"{format(idx,'03d')}.npy"),np.mean(np.squeeze(np.array(arr_list_2d)), axis=0))
+
+
+
+# enc = np.load('encoder.npy', allow_pickle=True)[0]
+
+enc = {key:value for value, key in enumerate(np.unique(train_df['tag'].values))}
 inverse_transformer = {value:key for key,value in enc.items()}
 
 
@@ -73,7 +121,7 @@ inverse_transformer = {value:key for key,value in enc.items()}
 
 try:
 
-    feature_extractor = load_model('trained_weights/feature_extractor.h5')
+    feature_extractor = load_model('feature_extractor.h5')
 
 except FileNotFoundError:
 
@@ -84,7 +132,7 @@ vid_feat = []
 
 for idx, i in enumerate(range(video_labelled.shape[0])):
 
-    vid_feat.append(np.reshape(np.load(f"features/{format(idx,'03d')}.npy"),(392,256)))
+    vid_feat.append(np.reshape(np.load(f"feat/{format(idx,'03d')}.npy"),(392,256)))
 
 vid_feat = np.array(vid_feat)
 
@@ -92,7 +140,18 @@ x_train, x_test, y_train, y_test = train_test_split(vid_feat, train_df['tag'].va
 
 
 
-model.fit(x_train, y_train, epochs=10, batch_size=32, validation_data=(x_test, y_test))
+
+label_int = np.array([enc[inst] for inst in train_df['tag'].values])
+
+label_one = to_categorical(label_int)
+batch_size = 5
+
+
+dataset = tf.data.Dataset.from_tensor_slices((vid_feat,label_one))
+
+dataset = dataset.batch(batch_size)
+
+model.fit(dataset, epochs=10)
 
 
 
