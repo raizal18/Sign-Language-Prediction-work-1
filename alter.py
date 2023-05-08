@@ -26,6 +26,8 @@ from temporal_gcnn import model
 
 EXTRACT_FEATURE_FROM_SCRATCH  = False
 
+preprocess_input = tf.keras.application.resnet50.preprocess_input
+
 mpl.rcParams.update({
     'font.size': 10,
 })
