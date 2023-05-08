@@ -14,12 +14,17 @@ import shutil
 import glob
 import pandas as pd
 from numpy import random
+from keras.utils import to_categorical
 from keras.preprocessing.image import ImageDataGenerator
+from keras.models import load_model
+from sklearn.model_selection import train_test_split
 from main import _MAIN_PATH, DATA_PATH, content_directory, video_path, details, info_csv 
 from keras import layers
 import mediapipe as mp
 import logging
 from keras.utils import Progbar
+from temporal_gcnn import model
+
 
 mpl.rcParams.update({
     'font.size': 10,
@@ -55,8 +60,39 @@ for idx,path in enumerate(train_df['path']):
     max_dims.append(fps)
     i_bar.update(idx)
 
+# get encoder 
+
+enc = np.load('encoder.npy', allow_pickle=True)[0]
+
+inverse_transformer = {value:key for key,value in enc.items()}
 
 
+# Encode Train Labels
+
+ 
+
+try:
+
+    feature_extractor = load_model('trained_weights/feature_extractor.h5')
+
+except FileNotFoundError:
+
+    raise FileNotFoundError
+
+
+vid_feat = []
+
+for idx, i in enumerate(range(video_labelled.shape[0])):
+
+    vid_feat.append(np.reshape(np.load(f"features/{format(idx,'03d')}.npy"),(392,256)))
+
+vid_feat = np.array(vid_feat)
+
+x_train, x_test, y_train, y_test = train_test_split(vid_feat, train_df['tag'].values, test_size=0.3)
+
+
+
+model.fit(x_train, y_train, epochs=10, batch_size=32, validation_data=(x_test, y_test))
 
 
 
