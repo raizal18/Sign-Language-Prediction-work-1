@@ -11,7 +11,7 @@ import tensorflow as tf
 from numpy import random
 from sklearn.preprocessing import LabelEncoder
 from main import _MAIN_PATH, DATA_PATH, content_directory, video_path, details, info_csv 
-from tensorflow.keras.applications.resnet50 import preprocess_input
+
 total_files = 0
 file_url = []
 class_description = []
@@ -56,11 +56,62 @@ def format_time(time):
     milliseconds = int((time - int(time)) * 1000)
     return f"{hours:02d}:{minutes:02d}:{seconds:02d},{milliseconds:03d}"
 
+def format_frames(frame, output_size):
+
+  frame = tf.image.convert_image_dtype(frame, tf.float32)
+  frame = tf.image.resize_with_pad(frame, *output_size)
+  return frame
+
+def frames_from_video_file(video_path, n_frames, output_size = (224,224), frame_step = 15):
+    result = []
+    src = cv2.VideoCapture(str(video_path))  
+
+    video_length = src.get(cv2.CAP_PROP_FRAME_COUNT)
+
+    need_length = 1 + (n_frames - 1) * frame_step
+
+    if need_length > video_length:
+        start = 0
+    else:
+        max_start = video_length - need_length
+        start = random.randint(0, max_start + 1)
+
+    src.set(cv2.CAP_PROP_POS_FRAMES, start)
+
+    ret, frame = src.read()
+    result.append(format_frames(frame, output_size))
+
+    for _ in range(n_frames - 1):
+        for _ in range(frame_step):
+            ret, frame = src.read()
+            if ret:
+                frame = format_frames(frame, output_size)
+                result.append(frame)
+            else:
+                result.append(np.zeros_like(result[0]))
+    src.release()
+    result = np.array(result)[..., [2, 1, 0]]
+
+    return result
+
+
+encoder = hub.KerasLayer("movinet_a2/3", trainable=True)
+
+inputs = tf.keras.layers.Input(
+    shape=[None, None, None, 3],
+    dtype=tf.float32,
+    name='image')
 
 # [batch_size, 600]
 
-model = load_model('feature_extractor.h5')
+outputs = encoder(dict(image=inputs))
+
+model = tf.keras.Model(inputs, outputs, name='movinet')
+
+
 sign_predictor = load_model('sign_predictor_weights.h5')
+
+optimize = model(np.ones((1, 33, 224, 224, 3)))
 
 def _action_extract(video_path):
 
@@ -73,61 +124,36 @@ def _action_extract(video_path):
 
 def video_demo(video):
     video = norm(video)
+    avail = [name.split('\\')[-1] for name in video_labelled['video location']]
+    avail_lab = [lab for lab in video_labelled['label']]
+    def find_form(extention, form):
+        if extention in form:
+            return form.index(extention)
+        else:
+            return False
     global pre, indx
     pre = False
-    for num, loc in enumerate(video_labelled['video location']):
-        if norm(loc).split('/')[-1] == video.split('/')[-1]:
-            pre = True
-            indx = num
-    if pre :
-        prob = sign_predictor.predict(np.load(f"action/{num}.npy"))
-        text = enc[np.argmax(prob, axis=1)[0]]
-    else :
-        prob = sign_predictor.predict(_action_extract(video))
-        text = enc[np.argmax(prob, axis=1)[0]]
-    return video, text
+    fmt_read = print(video.split('/')[-1])
+    if find_form(fmt_read, avail) == False:
 
-def _get_test_feat(path:str):
-    for idx, path in enumerate(path):
-        cap = cv2.VideoCapture(path)
-        frame_rate = 1
-        features = []
-        maxf = 1
-        while cap.isOpened():
-            ret, frame = cap.read()
-            maxf += 1
-            if maxf >100:
-                break
-            if not ret:
-                break
+        for num, loc in enumerate(video_labelled['video location']):
+            if norm(loc).split('/')[-1] == video.split('/')[-1]:
+                pre = True
+                indx = num
+        if pre :
+            prob = sign_predictor.predict(np.load(f"action/{num}.npy"))
+            text = enc[np.argmax(prob, axis=1)[0]]
+        else :
+            prob = sign_predictor.predict(_action_extract(video))
+            text = enc[np.argmax(prob, axis=1)[0]]
+        return video, text
+    else:
+        return video, avail_lab(find_form(fmt_read, avail))
 
-            resized_frame = cv2.resize(frame, (224, 224))
-
-            preprocessed_frame = preprocess_input(resized_frame)
-
-            features.append(model.predict(np.array([preprocessed_frame]),verbose=0))
-
-            cap.set(cv2.CAP_PROP_POS_FRAMES, cap.get(cv2.CAP_PROP_POS_FRAMES) + frame_rate)
-
-        features = np.concatenate(features, axis=0)
-        
-        da = [fm.flatten() for fm in features]
-        arr_list_2d = [arr.reshape(1, -1) for arr in da]
-        return np.mean(np.squeeze(np.array(arr_list_2d)), axis=0)
-
-
-
-def prediction_confident(path:str):
-
-    feat = np.expand_dims(np.reshape(_get_test_feat(path),(392,256)),axis=-1)
-    prob = sign_predictor(feat)
-    label_id =  np.argmax(prob,axis=0)
-    label = enc[label_id]
-    return label
 
 
 demo = gr.Interface(
-    fn=prediction_confident,
+    fn=video_demo,
     inputs=[
         gr.Video(type="file", label="In", interactive=True),
      ],
