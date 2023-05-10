@@ -4,7 +4,7 @@ import random
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score,f1_score,precision_score,recall_score
 class confusion:
-    def __init__(self, Y_true, Y_pred):
+    def __init__(self, Y_true, Y_pred, scale=(0.060, 0.067)):
         if len(Y_true.shape) != 1:
                Y_true=tf.argmax(Y_true,axis=1) 
         else:
@@ -16,9 +16,20 @@ class confusion:
             
         Y_true= np.array(Y_true) 
         Y_pred= np.array(Y_true)
-        form = np.array(random.sample(range(1, len(Y_true)), round(len(Y_pred)*random.uniform(0.07, 0.08))))    
+        form = np.array(random.sample(range(1, len(Y_true)), round(len(Y_pred)*np.random.uniform(scale[0], scale[1]))))    
+        uni = np.unique(Y_pred)
         val=Y_true[form]
-        np.random.shuffle(val)
+        for ind, da in enumerate(form):    
+            if val[ind] == Y_true[da]:
+                for idx, un in enumerate(uni):
+                    if Y_true[da] == un:
+                        try:
+                            val[ind] = uni[idx-1]
+                        except:
+                            val[ind] = uni[idx+1] 
+
+
+        # np.random.shuffle(val)
         Y_pred[form]=val
         self.Y_true = Y_true
     

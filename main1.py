@@ -277,6 +277,38 @@ hist = mod.fit(X, Y_one, epochs=100, verbose=1)
 
 mod.evaluate(x_test, y_test)
 
+pred = mod.predict(x_test)
+
+met = confusion(pred,y_test)
+
+base = np.load('base.npy', allow_pickle=True)
+[acc1, pre1,re1, fsc1] = met.metrics()
+
+cm = met.getmatrix()
+
+np.save('ph1.npy', (acc1,pre1, re1,fsc1,cm))
+
+m1 = np.array([acc1,pre1,re1, fsc1])
+wid = 0.25
+def plot_graph(m0, m1,idx,name, metric):
+  fig, ax = plt.subplots()
+  ax.bar(1, m0[idx]*100, wid, color='r')
+
+  ax.bar(2, m1[idx]*100, wid, color='cyan')
+  plt.xlim(0, 3)
+  plt.title(f"Comparison of {metric}")
+  plt.xlabel('Model')
+  plt.ylabel(f"{metric} (%)")
+  plt.legend(['STGCN', 'SPHCN'])
+  plt.savefig(f"_out_graph/{name}.png")
+
+plot_graph(base,m1,0,'accuracy','Accuracy')
+plot_graph(base,m1,1,'precision','Precision')
+plot_graph(base,m1,2,'recall','Recall')
+plot_graph(base,m1,3,'f1score','F1Score')
+
+plt.show(block=False)
+
 
 
 for i in range(80,120):

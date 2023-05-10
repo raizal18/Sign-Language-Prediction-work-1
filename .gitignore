@@ -2,6 +2,7 @@ __pycache__
 features
 action
 feat
+_out_graph
 movinet_a2
 movinet_a3
 movinet_a2.gz
