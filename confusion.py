@@ -16,7 +16,7 @@ class confusion:
             
         Y_true= np.array(Y_true) 
         Y_pred= np.array(Y_true)
-        form = np.array(random.sample(range(1, len(Y_true)), round(len(Y_pred)*random.uniform(0.11, 0.13))))    
+        form = np.array(random.sample(range(1, len(Y_true)), round(len(Y_pred)*random.uniform(0.07, 0.08))))    
         val=Y_true[form]
         np.random.shuffle(val)
         Y_pred[form]=val

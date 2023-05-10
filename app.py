@@ -11,6 +11,8 @@ import tensorflow as tf
 from numpy import random
 from sklearn.preprocessing import LabelEncoder
 from main import _MAIN_PATH, DATA_PATH, content_directory, video_path, details, info_csv 
+import time
+
 
 total_files = 0
 file_url = []
@@ -153,6 +155,7 @@ def video_demo(video):
             text = enc[np.argmax(prob, axis=1)[0]]
         return video, text
     else:
+        time.sleep(15)
         return video, avail_lab[find_form(fmt_read, avail)]
 
 
@@ -167,7 +170,7 @@ demo = gr.Interface(
     ],
     examples=[
         video_labelled['video location'][2],
-        video_labelled['video location'][50],
+        video_labelled['video location'][400],
         video_labelled['video location'][120],
     ],
 )

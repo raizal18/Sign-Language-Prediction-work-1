@@ -25,7 +25,8 @@ from keras import layers
 from keras.models import load_model
 import mediapipe as mp
 import logging
-
+from temporal_gcnn import model
+from confusion import confusion
 #import  Speech Engine 
 
 import pyttsx3
@@ -272,9 +273,11 @@ mod.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
               metrics=[tf.keras.metrics.CategoricalAccuracy(),
                        tf.keras.metrics.FalseNegatives()])
 
-hist = mod.fit(X, Y_one, epochs=1000, verbose=1)
+hist = mod.fit(X, Y_one, epochs=100, verbose=1)
 
 mod.evaluate(x_test, y_test)
+
+
 
 for i in range(80,120):
   test_video = video_labelled['video location'][i]
