@@ -12,6 +12,7 @@ from numpy import random
 from sklearn.preprocessing import LabelEncoder
 from main import _MAIN_PATH, DATA_PATH, content_directory, video_path, details, info_csv 
 import time
+import pyttsx3
 
 
 total_files = 0
@@ -156,7 +157,11 @@ def video_demo(video):
         return video, text
     else:
         time.sleep(15)
-        return video, avail_lab[find_form(fmt_read, avail)]
+        fcn = avail_lab[find_form(fmt_read, avail)]
+        engine = pyttsx3.init()
+        engine.save_to_file(fcn, 'files/outs_.mp3')
+        engine.runAndWait()
+        return video, fcn, 'files/outs_.mp3'
 
 
 
@@ -166,7 +171,8 @@ demo = gr.Interface(
         gr.Video(type="file", label="In", interactive=True),
      ],
     outputs=[gr.Video(label="Out"),
-             gr.Label(label='sign')
+             gr.Label(label='sign'),
+             gr.Audio(label='narratation')
     ],
     examples=[
         video_labelled['video location'][2],
