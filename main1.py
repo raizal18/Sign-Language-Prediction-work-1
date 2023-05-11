@@ -289,6 +289,12 @@ cm = met.getmatrix()
 np.save('ph1.npy', (acc1,pre1, re1,fsc1,cm))
 
 m1 = np.array([acc1,pre1,re1, fsc1])
+
+print(f"model STGCN : accuracy {base[0]} precision : {base[1]} recall : {base[2]} F1score : {base[3]}")
+
+print(f"model SPHCN : accuracy {acc1} precision : {pre1} recall : {re1} F1score : {fsc1}")
+
+
 wid = 0.25
 def plot_graph(m0, m1,idx,name, metric):
   fig, ax = plt.subplots()

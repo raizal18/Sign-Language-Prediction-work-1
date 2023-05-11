@@ -154,9 +154,13 @@ def video_demo(video):
         else :
             prob = sign_predictor.predict(_action_extract(video))
             text = enc[np.argmax(prob, axis=1)[0]]
-        return video, text
+        engine = pyttsx3.init()
+        engine.save_to_file(text, 'files/outs_.mp3')
+        engine.runAndWait()
+
+        return video, text, 'files/outs_.mp3'
     else:
-        time.sleep(15)
+        time.sleep(10)
         fcn = avail_lab[find_form(fmt_read, avail)]
         engine = pyttsx3.init()
         engine.save_to_file(fcn, 'files/outs_.mp3')
