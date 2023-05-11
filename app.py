@@ -176,9 +176,9 @@ demo = gr.Interface(
      ],
     outputs=[gr.Video(label="Out"),
              gr.Label(label='sign'),
-             gr.Audio(label='narratation')
+             gr.Audio(label='Text-to-speech')
     ],
-    examples=[
+        examples=[
         video_labelled['video location'][2],
         video_labelled['video location'][400],
         video_labelled['video location'][120],
