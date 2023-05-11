@@ -160,9 +160,11 @@ def video_demo(video):
 
         return video, text, 'files/outs_.mp3'
     else:
-        time.sleep(10)
+        time.sleep(15)
         fcn = avail_lab[find_form(fmt_read, avail)]
         engine = pyttsx3.init()
+        rate = engine.getProperty('rate')
+        engine.setProperty('rate', rate-50)
         engine.save_to_file(fcn, 'files/outs_.mp3')
         engine.runAndWait()
         return video, fcn, 'files/outs_.mp3'
