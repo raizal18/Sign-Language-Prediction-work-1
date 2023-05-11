@@ -317,41 +317,41 @@ plt.show(block=False)
 
 
 
-for i in range(80,120):
-  test_video = video_labelled['video location'][i]
-  test_label = video_labelled['label'][i]
+# for i in range(80,120):
+#   test_video = video_labelled['video location'][i]
+#   test_label = video_labelled['label'][i]
 
-  action = _action_extract(test_video)
+#   action = _action_extract(test_video)
 
-  test_pred = mod.predict(action)
+#   test_pred = mod.predict(action)
 
-  pred_label = inverse_key[np.argmax(test_pred,axis=1)[0]]
+#   pred_label = inverse_key[np.argmax(test_pred,axis=1)[0]]
 
-  print(f"{test_label} -> {pred_label}")
-# text = list(enc.inverse_transform(np.argmax(test_pred, axis=1)))
+#   print(f"{test_label} -> {pred_label}")
+# # text = list(enc.inverse_transform(np.argmax(test_pred, axis=1)))
 
-def show_sign_prediction(sample, ):
-    mp_holistic = mp.solutions.holistic 
-    cap = cv2.VideoCapture(sample)
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    frame_interval = round(fps / 24)
-    while cap.isOpened():
-        ret, frame = cap.read()
+# def show_sign_prediction(sample, ):
+#     mp_holistic = mp.solutions.holistic 
+#     cap = cv2.VideoCapture(sample)
+#     fps = cap.get(cv2.CAP_PROP_FPS)
+#     frame_interval = round(fps / 24)
+#     while cap.isOpened():
+#         ret, frame = cap.read()
 
-        if ret:
+#         if ret:
 
-            if cap.get(cv2.CAP_PROP_POS_FRAMES) % frame_interval == 0:
-                frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
-                cv2.imshow('test data', frame)
+#             if cap.get(cv2.CAP_PROP_POS_FRAMES) % frame_interval == 0:
+#                 frame = cv2.resize(frame, (720, 480),interpolation = cv2.INTER_LINEAR)
+#                 cv2.imshow('test data', frame)
                 
-                if cv2.waitKey(10) & 0xFF == ord('q'):
-                    cap.release()
-                    cv2.destroyAllWindows()
-                    break
+#                 if cv2.waitKey(10) & 0xFF == ord('q'):
+#                     cap.release()
+#                     cv2.destroyAllWindows()
+#                     break
                 
-        else:    
-                cap.release()
-                cv2.destroyAllWindows()
+#         else:    
+#                 cap.release()
+#                 cv2.destroyAllWindows()
                   
-                break
+#                 break
 
