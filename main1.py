@@ -27,6 +27,7 @@ import mediapipe as mp
 import logging
 from temporal_gcnn import model
 from confusion import confusion
+import seaborn as sns
 #import  Speech Engine 
 
 import pyttsx3
@@ -286,6 +287,7 @@ base = np.load('base.npy', allow_pickle=True)
 
 cm = met.getmatrix()
 
+
 np.save('ph1.npy', (acc1,pre1, re1,fsc1,cm))
 
 m1 = np.array([acc1,pre1,re1, fsc1])
@@ -312,8 +314,19 @@ plot_graph(base,m1,0,'accuracy','Accuracy')
 plot_graph(base,m1,1,'precision','Precision')
 plot_graph(base,m1,2,'recall','Recall')
 plot_graph(base,m1,3,'f1score','F1Score')
+plt.figure()
 
-plt.show(block=False)
+# plt.imshow(cm, cmap='viridis', interpolation='nearest')
+# plt.colorbar()  # Show a color scale legend
+# plt.title('Heatmap Example')
+# plt.xlabel('X-axis')
+# plt.ylabel('Y-axis')
+# plt.xticks(np.arange(data.shape[1]), labels=['A', 'B', 'C'])  # Customize x-axis tick labels
+# plt.yticks(np.arange(data.shape[0]), labels=['X', 'Y', 'Z'])  # Customize y-axis tick labels
+
+
+
+plt.show(block=True)
 
 
 
